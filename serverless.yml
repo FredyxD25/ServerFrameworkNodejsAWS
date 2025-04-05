@@ -32,8 +32,14 @@ functions:
     handler: src/crearTarea.crearTarea
     events:
       - httpApi:
-          path: /tarea
+          path: /enviar
           method: post
+  getTask:
+    handler: src/getTask.getTask
+    events:
+      - httpApi:
+          path: /visualizar
+          method: get
 
 resources: # Configuracion for dynamodb
   Resources:

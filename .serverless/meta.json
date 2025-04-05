@@ -133,7 +133,7 @@
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                  "S3Key": "serverless/aws-lambda/dev/1743827135053-2025-04-05T04:25:35.053Z/aws-lambda.zip"
+                  "S3Key": "serverless/aws-lambda/dev/1743827408931-2025-04-05T04:30:08.931Z/aws-lambda.zip"
                 },
                 "Handler": "src/handler.hello",
                 "Runtime": "nodejs20.x",
@@ -156,7 +156,7 @@
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                  "S3Key": "serverless/aws-lambda/dev/1743827135053-2025-04-05T04:25:35.053Z/aws-lambda.zip"
+                  "S3Key": "serverless/aws-lambda/dev/1743827408931-2025-04-05T04:30:08.931Z/aws-lambda.zip"
                 },
                 "Handler": "src/crearTarea.crearTarea",
                 "Runtime": "nodejs20.x",
@@ -454,7 +454,7 @@
         "artifactsS3KeyDirname": "serverless/aws-lambda/dev/code-artifacts",
         "deploymentBucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
         "artifact": "D:\\Datos Fredy\\Programacion\\ServerFrameworkNodejsAWS\\.serverless\\aws-lambda.zip",
-        "artifactDirectoryName": "serverless/aws-lambda/dev/1743827135053-2025-04-05T04:25:35.053Z"
+        "artifactDirectoryName": "serverless/aws-lambda/dev/1743827408931-2025-04-05T04:30:08.931Z"
       },
       "functions": {
         "hello": {
@@ -650,7 +650,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                "S3Key": "serverless/aws-lambda/dev/1743827135053-2025-04-05T04:25:35.053Z/aws-lambda.zip"
+                "S3Key": "serverless/aws-lambda/dev/1743827408931-2025-04-05T04:30:08.931Z/aws-lambda.zip"
               },
               "Handler": "src/handler.hello",
               "Runtime": "nodejs20.x",
@@ -673,7 +673,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                "S3Key": "serverless/aws-lambda/dev/1743827135053-2025-04-05T04:25:35.053Z/aws-lambda.zip"
+                "S3Key": "serverless/aws-lambda/dev/1743827408931-2025-04-05T04:30:08.931Z/aws-lambda.zip"
               },
               "Handler": "src/crearTarea.crearTarea",
               "Runtime": "nodejs20.x",
@@ -986,26 +986,26 @@
     "userName": "fredyxd25",
     "serviceProviderAwsAccountId": "158735973681",
     "serviceProviderAwsCfStackName": "aws-lambda-dev",
-    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:158735973681:stack/aws-lambda-dev/3e6467a0-11ac-11f0-a804-12e5f0ba5a7f",
-    "serviceProviderAwsCfStackCreated": "2025-04-04T23:26:32.850Z",
-    "serviceProviderAwsCfStackUpdated": "2025-04-05T04:20:01.847Z",
-    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:158735973681:stack/aws-lambda-dev/ba560b00-11d6-11f0-a7a7-0e9448c18623",
+    "serviceProviderAwsCfStackCreated": "2025-04-05T04:30:39.680Z",
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": "CREATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "CreateTaskLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-createTask:7",
+        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-createTask:9",
         "Description": "Current Lambda function version",
         "ExportName": "sls-aws-lambda-dev-CreateTaskLambdaFunctionQualifiedArn"
       },
       {
         "OutputKey": "HelloLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-hello:10",
+        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-hello:12",
         "Description": "Current Lambda function version",
         "ExportName": "sls-aws-lambda-dev-HelloLambdaFunctionQualifiedArn"
       },
       {
         "OutputKey": "HttpApiId",
-        "OutputValue": "eud8fkkbb9",
+        "OutputValue": "6u571lcbhh",
         "Description": "Id of the HTTP API",
         "ExportName": "sls-aws-lambda-dev-HttpApiId"
       },
@@ -1016,7 +1016,7 @@
       },
       {
         "OutputKey": "HttpApiUrl",
-        "OutputValue": "https://eud8fkkbb9.execute-api.us-east-1.amazonaws.com",
+        "OutputValue": "https://6u571lcbhh.execute-api.us-east-1.amazonaws.com",
         "Description": "URL of the HTTP API",
         "ExportName": "sls-aws-lambda-dev-HttpApiUrl"
       }
@@ -1130,7 +1130,7 @@
           "Properties": {
             "Code": {
               "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-              "S3Key": "serverless/aws-lambda/dev/1743827135053-2025-04-05T04:25:35.053Z/aws-lambda.zip"
+              "S3Key": "serverless/aws-lambda/dev/1743827408931-2025-04-05T04:30:08.931Z/aws-lambda.zip"
             },
             "Handler": "src/handler.hello",
             "Runtime": "nodejs20.x",
@@ -1153,7 +1153,7 @@
           "Properties": {
             "Code": {
               "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-              "S3Key": "serverless/aws-lambda/dev/1743827135053-2025-04-05T04:25:35.053Z/aws-lambda.zip"
+              "S3Key": "serverless/aws-lambda/dev/1743827408931-2025-04-05T04:30:08.931Z/aws-lambda.zip"
             },
             "Handler": "src/crearTarea.crearTarea",
             "Runtime": "nodejs20.x",

@@ -64,6 +64,10 @@
 -------------------------------------------------
     debugear :v
         serverless logs -f createTask --tail
+    
+    eliminar y crear lambda
+        serverless remove
+        serverless deploy --verbose
 
 Pendiente
     Enrutador

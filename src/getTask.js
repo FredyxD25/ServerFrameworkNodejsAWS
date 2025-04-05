@@ -1,34 +1,25 @@
 const AWS = require('aws-sdk');
-
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.getTask = async (event) => {
+module.exports.getTask = async () => {
   try {
-
     const params = {
-      TableName: 'TablaPrueba'
+      TableName: 'TablaPrueba',
     };
 
-    const result = await dynamodb.get(params).promise();
-
-    if (!result.Item) {
-      return {
-        statusCode: 404,
-        body: JSON.stringify({ error: 'Tarea no encontrada' }),
-      };
-    }
+    const data = await dynamodb.scan(params).promise();
 
     return {
       statusCode: 200,
-      body: JSON.stringify(result.Item),
+      body: JSON.stringify(data.Items),
     };
 
   } catch (error) {
-    console.error('Error al obtener tarea:', error);
+    console.error('Error al obtener tareas:', error);
 
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Error interno del servidor' }),
+      body: JSON.stringify({ error: 'Error al obtener las tareas' }),
     };
   }
 };

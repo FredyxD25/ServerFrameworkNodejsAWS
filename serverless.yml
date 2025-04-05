@@ -15,7 +15,11 @@ provider:
         - dynamodb:Scan
         - dynamodb:DeleteItem
       Resource:
-        - arn:aws:dynamodb:us-east-1:158735973681:table/Prueba
+        - arn:aws:dynamodb:us-east-1:158735973681:table/TablaPrueba
+
+package:
+  include:
+    - node_modules/aws-sdk/**
 
 functions:
   hello:
@@ -28,7 +32,7 @@ functions:
     handler: src/crearTarea.crearTarea
     events:
       - httpApi:
-          path: /tasks
+          path: /tarea
           method: post
 
 resources: # Configuracion for dynamodb
@@ -38,7 +42,6 @@ resources: # Configuracion for dynamodb
       Properties:
         TableName: TablaPrueba
         BillingMode: PAY_PER_REQUEST
-        # ProvisionedThroughput:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S

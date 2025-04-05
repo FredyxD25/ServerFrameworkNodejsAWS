@@ -1,5 +1,8 @@
 # ServerFrameworkNodejsAWS
 
+**Comando para ejecutar scritps en powershell**
+
+
 1. Crear un Grupo IAM y un usuario con credenciales
 
     User name,Password,Console sign-in URL
@@ -19,8 +22,9 @@
 
 4. Utilzar framework Severless https://www.serverless.com/
 
-    aw --> Crear Exepcion en la consola de windows
+    Set-ExecutionPolicy Unrestricted -Scope Process --> Crear Exepcion en la consola de windows
     npm install -g serverless
+    npm install aws-sdk
 
     Verificar:
         serverless --version
@@ -36,7 +40,6 @@
         **Acceder a la carpeta de configuracion**
             cd .\aws-lambda\ 
             serverless deploy --verbose
-            sls deploy --verbose
 
 ------------------
 ----ConexionDB----
@@ -51,10 +54,16 @@
 
 4. crear "crearTarea.js"
 
-5. npm i uuid
+5. **Crear node modules (Ejecutar siempre que se abra en un nuevo compilador)**
+    npm i uuid
 
-6. npm init -y
-
+6. Crear paquetes json
+    npm init -y
+-------------------------------------------------
+------------**Logs en tiempo real**--------------
+-------------------------------------------------
+    debugear :v
+        serverless logs -f createTask --tail
 
 Pendiente
     Enrutador

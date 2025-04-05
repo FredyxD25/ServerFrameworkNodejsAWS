@@ -3,7 +3,7 @@ const { v4 } = require('uuid');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.crearTarea = async (event) => {
+module.exports.postTask = async (event) => {
   try {
     // Parsear el body (que viene como string)
     const { title, description } = JSON.parse(event.body);

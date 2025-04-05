@@ -1,7 +1,7 @@
 # ServerFrameworkNodejsAWS
 
 **Comando para ejecutar scritps en powershell**
-
+Set-ExecutionPolicy Unrestricted -Scope Process
 
 1. Crear un Grupo IAM y un usuario con credenciales
 

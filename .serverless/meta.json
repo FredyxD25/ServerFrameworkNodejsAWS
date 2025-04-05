@@ -40,6 +40,12 @@
                 "LogGroupName": "/aws/lambda/aws-lambda-dev-createTask"
               }
             },
+            "GetTaskLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/aws-lambda-dev-getTask"
+              }
+            },
             "IamRoleLambdaExecution": {
               "Type": "AWS::IAM::Role",
               "Properties": {
@@ -133,7 +139,7 @@
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                  "S3Key": "serverless/aws-lambda/dev/1743830490098-2025-04-05T05:21:30.098Z/aws-lambda.zip"
+                  "S3Key": "serverless/aws-lambda/dev/1743883384706-2025-04-05T20:03:04.706Z/aws-lambda.zip"
                 },
                 "Handler": "src/handler.hello",
                 "Runtime": "nodejs20.x",
@@ -156,7 +162,7 @@
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                  "S3Key": "serverless/aws-lambda/dev/1743830490098-2025-04-05T05:21:30.098Z/aws-lambda.zip"
+                  "S3Key": "serverless/aws-lambda/dev/1743883384706-2025-04-05T20:03:04.706Z/aws-lambda.zip"
                 },
                 "Handler": "src/crearTarea.crearTarea",
                 "Runtime": "nodejs20.x",
@@ -174,24 +180,57 @@
                 "CreateTaskLogGroup"
               ]
             },
-            "HelloLambdaVersionVdz3mpqW4Uku3K7AvzfKyaNmUvrxki2b2qBJRn4To": {
+            "GetTaskLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
+                  "S3Key": "serverless/aws-lambda/dev/1743883384706-2025-04-05T20:03:04.706Z/aws-lambda.zip"
+                },
+                "Handler": "src/getTask.getTask",
+                "Runtime": "nodejs20.x",
+                "FunctionName": "aws-lambda-dev-getTask",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "GetTaskLogGroup"
+              ]
+            },
+            "HelloLambdaVersionLCDzePcoLryIeGhH3V3GU4MDqe3j8oqbZh97l7ZfVyU": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "HelloLambdaFunction"
                 },
-                "CodeSha256": "2sUivfTm6wgH0G0XcwlIQOrT0RhnaS2CEvJEi3sQQpQ="
+                "CodeSha256": "zaELeeuYwofDVYMEGVbFYk4HpTiHA78Yo9OcIQlF7yE="
               }
             },
-            "CreateTaskLambdaVersiondkwvLY6viI3bjvwlT1qauyaQCKr8aew5GFwYbXkj18Q": {
+            "CreateTaskLambdaVersiondcqU3aeggyLDf0NEx6ZYK2HjIOzMl1aTUHx5kfpSc": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "CreateTaskLambdaFunction"
                 },
-                "CodeSha256": "2sUivfTm6wgH0G0XcwlIQOrT0RhnaS2CEvJEi3sQQpQ="
+                "CodeSha256": "zaELeeuYwofDVYMEGVbFYk4HpTiHA78Yo9OcIQlF7yE="
+              }
+            },
+            "GetTaskLambdaVersionn09ofb0aV9Zj3yTaBXmAvGtKZmjKXlHdbczqXYx6Rqg": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "GetTaskLambdaFunction"
+                },
+                "CodeSha256": "zaELeeuYwofDVYMEGVbFYk4HpTiHA78Yo9OcIQlF7yE="
               }
             },
             "HttpApi": {
@@ -343,13 +382,13 @@
                 "TimeoutInMillis": 30000
               }
             },
-            "HttpApiRoutePostTarea": {
+            "HttpApiRoutePostEnviar": {
               "Type": "AWS::ApiGatewayV2::Route",
               "Properties": {
                 "ApiId": {
                   "Ref": "HttpApi"
                 },
-                "RouteKey": "POST /tarea",
+                "RouteKey": "POST /enviar",
                 "Target": {
                   "Fn::Join": [
                     "/",
@@ -363,6 +402,81 @@
                 }
               },
               "DependsOn": "HttpApiIntegrationCreateTask"
+            },
+            "GetTaskLambdaPermissionHttpApi": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "GetTaskLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "HttpApi"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "HttpApiIntegrationGetTask": {
+              "Type": "AWS::ApiGatewayV2::Integration",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "IntegrationType": "AWS_PROXY",
+                "IntegrationUri": {
+                  "Fn::GetAtt": [
+                    "GetTaskLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "PayloadFormatVersion": "2.0",
+                "TimeoutInMillis": 30000
+              }
+            },
+            "HttpApiRouteGetVisualizar": {
+              "Type": "AWS::ApiGatewayV2::Route",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "RouteKey": "GET /visualizar",
+                "Target": {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      "integrations",
+                      {
+                        "Ref": "HttpApiIntegrationGetTask"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "DependsOn": "HttpApiIntegrationGetTask"
             },
             "usersTable": {
               "Type": "AWS::DynamoDB::Table",
@@ -394,7 +508,7 @@
             "HelloLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "HelloLambdaVersionVdz3mpqW4Uku3K7AvzfKyaNmUvrxki2b2qBJRn4To"
+                "Ref": "HelloLambdaVersionLCDzePcoLryIeGhH3V3GU4MDqe3j8oqbZh97l7ZfVyU"
               },
               "Export": {
                 "Name": "sls-aws-lambda-dev-HelloLambdaFunctionQualifiedArn"
@@ -403,10 +517,19 @@
             "CreateTaskLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "CreateTaskLambdaVersiondkwvLY6viI3bjvwlT1qauyaQCKr8aew5GFwYbXkj18Q"
+                "Ref": "CreateTaskLambdaVersiondcqU3aeggyLDf0NEx6ZYK2HjIOzMl1aTUHx5kfpSc"
               },
               "Export": {
                 "Name": "sls-aws-lambda-dev-CreateTaskLambdaFunctionQualifiedArn"
+              }
+            },
+            "GetTaskLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "GetTaskLambdaVersionn09ofb0aV9Zj3yTaBXmAvGtKZmjKXlHdbczqXYx6Rqg"
+              },
+              "Export": {
+                "Name": "sls-aws-lambda-dev-GetTaskLambdaFunctionQualifiedArn"
               }
             },
             "HttpApiId": {
@@ -454,7 +577,7 @@
         "artifactsS3KeyDirname": "serverless/aws-lambda/dev/code-artifacts",
         "deploymentBucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
         "artifact": "D:\\Datos Fredy\\Programacion\\ServerFrameworkNodejsAWS\\.serverless\\aws-lambda.zip",
-        "artifactDirectoryName": "serverless/aws-lambda/dev/1743830490098-2025-04-05T05:21:30.098Z"
+        "artifactDirectoryName": "serverless/aws-lambda/dev/1743883384706-2025-04-05T20:03:04.706Z"
       },
       "functions": {
         "hello": {
@@ -475,18 +598,18 @@
           "timeout": 6,
           "runtime": "nodejs20.x",
           "vpc": {},
-          "versionLogicalId": "HelloLambdaVersionVdz3mpqW4Uku3K7AvzfKyaNmUvrxki2b2qBJRn4To"
+          "versionLogicalId": "HelloLambdaVersionLCDzePcoLryIeGhH3V3GU4MDqe3j8oqbZh97l7ZfVyU"
         },
         "createTask": {
           "handler": "src/crearTarea.crearTarea",
           "events": [
             {
               "httpApi": {
-                "path": "/tarea",
+                "path": "/enviar",
                 "method": "post"
               },
               "resolvedMethod": "POST",
-              "resolvedPath": "/tarea"
+              "resolvedPath": "/enviar"
             }
           ],
           "name": "aws-lambda-dev-createTask",
@@ -495,7 +618,27 @@
           "timeout": 6,
           "runtime": "nodejs20.x",
           "vpc": {},
-          "versionLogicalId": "CreateTaskLambdaVersiondkwvLY6viI3bjvwlT1qauyaQCKr8aew5GFwYbXkj18Q"
+          "versionLogicalId": "CreateTaskLambdaVersiondcqU3aeggyLDf0NEx6ZYK2HjIOzMl1aTUHx5kfpSc"
+        },
+        "getTask": {
+          "handler": "src/getTask.getTask",
+          "events": [
+            {
+              "httpApi": {
+                "path": "/visualizar",
+                "method": "get"
+              },
+              "resolvedMethod": "GET",
+              "resolvedPath": "/visualizar"
+            }
+          ],
+          "name": "aws-lambda-dev-getTask",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs20.x",
+          "vpc": {},
+          "versionLogicalId": "GetTaskLambdaVersionn09ofb0aV9Zj3yTaBXmAvGtKZmjKXlHdbczqXYx6Rqg"
         }
       },
       "resources": {
@@ -555,6 +698,12 @@
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
               "LogGroupName": "/aws/lambda/aws-lambda-dev-createTask"
+            }
+          },
+          "GetTaskLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/aws-lambda-dev-getTask"
             }
           },
           "IamRoleLambdaExecution": {
@@ -650,7 +799,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                "S3Key": "serverless/aws-lambda/dev/1743830490098-2025-04-05T05:21:30.098Z/aws-lambda.zip"
+                "S3Key": "serverless/aws-lambda/dev/1743883384706-2025-04-05T20:03:04.706Z/aws-lambda.zip"
               },
               "Handler": "src/handler.hello",
               "Runtime": "nodejs20.x",
@@ -673,7 +822,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                "S3Key": "serverless/aws-lambda/dev/1743830490098-2025-04-05T05:21:30.098Z/aws-lambda.zip"
+                "S3Key": "serverless/aws-lambda/dev/1743883384706-2025-04-05T20:03:04.706Z/aws-lambda.zip"
               },
               "Handler": "src/crearTarea.crearTarea",
               "Runtime": "nodejs20.x",
@@ -691,24 +840,57 @@
               "CreateTaskLogGroup"
             ]
           },
-          "HelloLambdaVersionVdz3mpqW4Uku3K7AvzfKyaNmUvrxki2b2qBJRn4To": {
+          "GetTaskLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
+                "S3Key": "serverless/aws-lambda/dev/1743883384706-2025-04-05T20:03:04.706Z/aws-lambda.zip"
+              },
+              "Handler": "src/getTask.getTask",
+              "Runtime": "nodejs20.x",
+              "FunctionName": "aws-lambda-dev-getTask",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "GetTaskLogGroup"
+            ]
+          },
+          "HelloLambdaVersionLCDzePcoLryIeGhH3V3GU4MDqe3j8oqbZh97l7ZfVyU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "HelloLambdaFunction"
               },
-              "CodeSha256": "2sUivfTm6wgH0G0XcwlIQOrT0RhnaS2CEvJEi3sQQpQ="
+              "CodeSha256": "zaELeeuYwofDVYMEGVbFYk4HpTiHA78Yo9OcIQlF7yE="
             }
           },
-          "CreateTaskLambdaVersiondkwvLY6viI3bjvwlT1qauyaQCKr8aew5GFwYbXkj18Q": {
+          "CreateTaskLambdaVersiondcqU3aeggyLDf0NEx6ZYK2HjIOzMl1aTUHx5kfpSc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateTaskLambdaFunction"
               },
-              "CodeSha256": "2sUivfTm6wgH0G0XcwlIQOrT0RhnaS2CEvJEi3sQQpQ="
+              "CodeSha256": "zaELeeuYwofDVYMEGVbFYk4HpTiHA78Yo9OcIQlF7yE="
+            }
+          },
+          "GetTaskLambdaVersionn09ofb0aV9Zj3yTaBXmAvGtKZmjKXlHdbczqXYx6Rqg": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetTaskLambdaFunction"
+              },
+              "CodeSha256": "zaELeeuYwofDVYMEGVbFYk4HpTiHA78Yo9OcIQlF7yE="
             }
           },
           "HttpApi": {
@@ -860,13 +1042,13 @@
               "TimeoutInMillis": 30000
             }
           },
-          "HttpApiRoutePostTarea": {
+          "HttpApiRoutePostEnviar": {
             "Type": "AWS::ApiGatewayV2::Route",
             "Properties": {
               "ApiId": {
                 "Ref": "HttpApi"
               },
-              "RouteKey": "POST /tarea",
+              "RouteKey": "POST /enviar",
               "Target": {
                 "Fn::Join": [
                   "/",
@@ -880,6 +1062,81 @@
               }
             },
             "DependsOn": "HttpApiIntegrationCreateTask"
+          },
+          "GetTaskLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetTaskLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationGetTask": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "Fn::GetAtt": [
+                  "GetTaskLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetVisualizar": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /visualizar",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationGetTask"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationGetTask"
           },
           "usersTable": {
             "Type": "AWS::DynamoDB::Table",
@@ -911,7 +1168,7 @@
           "HelloLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersionVdz3mpqW4Uku3K7AvzfKyaNmUvrxki2b2qBJRn4To"
+              "Ref": "HelloLambdaVersionLCDzePcoLryIeGhH3V3GU4MDqe3j8oqbZh97l7ZfVyU"
             },
             "Export": {
               "Name": "sls-aws-lambda-dev-HelloLambdaFunctionQualifiedArn"
@@ -920,10 +1177,19 @@
           "CreateTaskLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateTaskLambdaVersiondkwvLY6viI3bjvwlT1qauyaQCKr8aew5GFwYbXkj18Q"
+              "Ref": "CreateTaskLambdaVersiondcqU3aeggyLDf0NEx6ZYK2HjIOzMl1aTUHx5kfpSc"
             },
             "Export": {
               "Name": "sls-aws-lambda-dev-CreateTaskLambdaFunctionQualifiedArn"
+            }
+          },
+          "GetTaskLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetTaskLambdaVersionn09ofb0aV9Zj3yTaBXmAvGtKZmjKXlHdbczqXYx6Rqg"
+            },
+            "Export": {
+              "Name": "sls-aws-lambda-dev-GetTaskLambdaFunctionQualifiedArn"
             }
           },
           "HttpApiId": {
@@ -973,7 +1239,7 @@
       "serviceProvider": null,
       "instanceParameters": null
     },
-    "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\r\norg: fredyxd25\r\n# \"service\" is the name of this project. This will also be added to your AWS resource names.\r\nservice: aws-lambda\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs20.x\r\n  region: us-east-1\r\n  iamRoleStatements:\r\n    - Effect: Allow\r\n      Action:\r\n        - dynamodb:PutItem\r\n        - dynamodb:GetItem\r\n        - dynamodb:Scan\r\n        - dynamodb:DeleteItem\r\n      Resource:\r\n        - arn:aws:dynamodb:us-east-1:158735973681:table/TablaPrueba\r\n\r\npackage:\r\n  include:\r\n    - node_modules/aws-sdk/**\r\n\r\nfunctions:\r\n  hello:\r\n    handler: src/handler.hello\r\n    events:\r\n      - httpApi:\r\n          path: /\r\n          method: get\r\n  createTask:\r\n    handler: src/crearTarea.crearTarea\r\n    events:\r\n      - httpApi:\r\n          path: /tarea\r\n          method: post\r\n\r\nresources: # Configuracion for dynamodb\r\n  Resources:\r\n    usersTable:\r\n      Type: AWS::DynamoDB::Table\r\n      Properties:\r\n        TableName: TablaPrueba\r\n        BillingMode: PAY_PER_REQUEST\r\n        AttributeDefinitions:\r\n          - AttributeName: id\r\n            AttributeType: S\r\n        KeySchema:\r\n          - AttributeName: id\r\n            KeyType: HASH",
+    "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\r\norg: fredyxd25\r\n# \"service\" is the name of this project. This will also be added to your AWS resource names.\r\nservice: aws-lambda\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs20.x\r\n  region: us-east-1\r\n  iamRoleStatements:\r\n    - Effect: Allow\r\n      Action:\r\n        - dynamodb:PutItem\r\n        - dynamodb:GetItem\r\n        - dynamodb:Scan\r\n        - dynamodb:DeleteItem\r\n      Resource:\r\n        - arn:aws:dynamodb:us-east-1:158735973681:table/TablaPrueba\r\n\r\npackage:\r\n  include:\r\n    - node_modules/aws-sdk/**\r\n\r\nfunctions:\r\n  hello:\r\n    handler: src/handler.hello\r\n    events:\r\n      - httpApi:\r\n          path: /\r\n          method: get\r\n  createTask:\r\n    handler: src/crearTarea.crearTarea\r\n    events:\r\n      - httpApi:\r\n          path: /enviar\r\n          method: post\r\n  getTask:\r\n    handler: src/getTask.getTask\r\n    events:\r\n      - httpApi:\r\n          path: /visualizar\r\n          method: get\r\n\r\nresources: # Configuracion for dynamodb\r\n  Resources:\r\n    usersTable:\r\n      Type: AWS::DynamoDB::Table\r\n      Properties:\r\n        TableName: TablaPrueba\r\n        BillingMode: PAY_PER_REQUEST\r\n        AttributeDefinitions:\r\n          - AttributeName: id\r\n            AttributeType: S\r\n        KeySchema:\r\n          - AttributeName: id\r\n            KeyType: HASH",
     "command": [
       "deploy"
     ],
@@ -986,28 +1252,34 @@
     "userName": "fredyxd25",
     "serviceProviderAwsAccountId": "158735973681",
     "serviceProviderAwsCfStackName": "aws-lambda-dev",
-    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:158735973681:stack/aws-lambda-dev/b41205d0-11dd-11f0-8393-1275319e6979",
-    "serviceProviderAwsCfStackCreated": "2025-04-05T05:20:35.618Z",
-    "serviceProviderAwsCfStackUpdated": null,
-    "serviceProviderAwsCfStackStatus": "CREATE_COMPLETE",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:158735973681:stack/aws-lambda-dev/38795710-11e3-11f0-9a35-12b4b457fe5b",
+    "serviceProviderAwsCfStackCreated": "2025-04-05T06:00:05.220Z",
+    "serviceProviderAwsCfStackUpdated": "2025-04-05T19:59:46.243Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "CreateTaskLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-createTask:14",
+        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-createTask:27",
         "Description": "Current Lambda function version",
         "ExportName": "sls-aws-lambda-dev-CreateTaskLambdaFunctionQualifiedArn"
       },
       {
         "OutputKey": "HelloLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-hello:17",
+        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-hello:30",
         "Description": "Current Lambda function version",
         "ExportName": "sls-aws-lambda-dev-HelloLambdaFunctionQualifiedArn"
       },
       {
         "OutputKey": "HttpApiId",
-        "OutputValue": "021gc1hn14",
+        "OutputValue": "r532olcxzk",
         "Description": "Id of the HTTP API",
         "ExportName": "sls-aws-lambda-dev-HttpApiId"
+      },
+      {
+        "OutputKey": "GetTaskLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-getTask:12",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-aws-lambda-dev-GetTaskLambdaFunctionQualifiedArn"
       },
       {
         "OutputKey": "ServerlessDeploymentBucketName",
@@ -1016,7 +1288,7 @@
       },
       {
         "OutputKey": "HttpApiUrl",
-        "OutputValue": "https://021gc1hn14.execute-api.us-east-1.amazonaws.com",
+        "OutputValue": "https://r532olcxzk.execute-api.us-east-1.amazonaws.com",
         "Description": "URL of the HTTP API",
         "ExportName": "sls-aws-lambda-dev-HttpApiUrl"
       }
@@ -1035,6 +1307,12 @@
           "Type": "AWS::Logs::LogGroup",
           "Properties": {
             "LogGroupName": "/aws/lambda/aws-lambda-dev-createTask"
+          }
+        },
+        "GetTaskLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/aws-lambda-dev-getTask"
           }
         },
         "IamRoleLambdaExecution": {
@@ -1130,7 +1408,7 @@
           "Properties": {
             "Code": {
               "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-              "S3Key": "serverless/aws-lambda/dev/1743830490098-2025-04-05T05:21:30.098Z/aws-lambda.zip"
+              "S3Key": "serverless/aws-lambda/dev/1743883384706-2025-04-05T20:03:04.706Z/aws-lambda.zip"
             },
             "Handler": "src/handler.hello",
             "Runtime": "nodejs20.x",
@@ -1153,7 +1431,7 @@
           "Properties": {
             "Code": {
               "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-              "S3Key": "serverless/aws-lambda/dev/1743830490098-2025-04-05T05:21:30.098Z/aws-lambda.zip"
+              "S3Key": "serverless/aws-lambda/dev/1743883384706-2025-04-05T20:03:04.706Z/aws-lambda.zip"
             },
             "Handler": "src/crearTarea.crearTarea",
             "Runtime": "nodejs20.x",
@@ -1171,24 +1449,57 @@
             "CreateTaskLogGroup"
           ]
         },
-        "HelloLambdaVersionVdz3mpqW4Uku3K7AvzfKyaNmUvrxki2b2qBJRn4To": {
+        "GetTaskLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
+              "S3Key": "serverless/aws-lambda/dev/1743883384706-2025-04-05T20:03:04.706Z/aws-lambda.zip"
+            },
+            "Handler": "src/getTask.getTask",
+            "Runtime": "nodejs20.x",
+            "FunctionName": "aws-lambda-dev-getTask",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "GetTaskLogGroup"
+          ]
+        },
+        "HelloLambdaVersionLCDzePcoLryIeGhH3V3GU4MDqe3j8oqbZh97l7ZfVyU": {
           "Type": "AWS::Lambda::Version",
           "DeletionPolicy": "Retain",
           "Properties": {
             "FunctionName": {
               "Ref": "HelloLambdaFunction"
             },
-            "CodeSha256": "2sUivfTm6wgH0G0XcwlIQOrT0RhnaS2CEvJEi3sQQpQ="
+            "CodeSha256": "zaELeeuYwofDVYMEGVbFYk4HpTiHA78Yo9OcIQlF7yE="
           }
         },
-        "CreateTaskLambdaVersiondkwvLY6viI3bjvwlT1qauyaQCKr8aew5GFwYbXkj18Q": {
+        "CreateTaskLambdaVersiondcqU3aeggyLDf0NEx6ZYK2HjIOzMl1aTUHx5kfpSc": {
           "Type": "AWS::Lambda::Version",
           "DeletionPolicy": "Retain",
           "Properties": {
             "FunctionName": {
               "Ref": "CreateTaskLambdaFunction"
             },
-            "CodeSha256": "2sUivfTm6wgH0G0XcwlIQOrT0RhnaS2CEvJEi3sQQpQ="
+            "CodeSha256": "zaELeeuYwofDVYMEGVbFYk4HpTiHA78Yo9OcIQlF7yE="
+          }
+        },
+        "GetTaskLambdaVersionn09ofb0aV9Zj3yTaBXmAvGtKZmjKXlHdbczqXYx6Rqg": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "GetTaskLambdaFunction"
+            },
+            "CodeSha256": "zaELeeuYwofDVYMEGVbFYk4HpTiHA78Yo9OcIQlF7yE="
           }
         },
         "HttpApi": {
@@ -1340,13 +1651,13 @@
             "TimeoutInMillis": 30000
           }
         },
-        "HttpApiRoutePostTarea": {
+        "HttpApiRoutePostEnviar": {
           "Type": "AWS::ApiGatewayV2::Route",
           "Properties": {
             "ApiId": {
               "Ref": "HttpApi"
             },
-            "RouteKey": "POST /tarea",
+            "RouteKey": "POST /enviar",
             "Target": {
               "Fn::Join": [
                 "/",
@@ -1360,6 +1671,81 @@
             }
           },
           "DependsOn": "HttpApiIntegrationCreateTask"
+        },
+        "GetTaskLambdaPermissionHttpApi": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "GetTaskLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "HttpApi"
+                  },
+                  "/*"
+                ]
+              ]
+            }
+          }
+        },
+        "HttpApiIntegrationGetTask": {
+          "Type": "AWS::ApiGatewayV2::Integration",
+          "Properties": {
+            "ApiId": {
+              "Ref": "HttpApi"
+            },
+            "IntegrationType": "AWS_PROXY",
+            "IntegrationUri": {
+              "Fn::GetAtt": [
+                "GetTaskLambdaFunction",
+                "Arn"
+              ]
+            },
+            "PayloadFormatVersion": "2.0",
+            "TimeoutInMillis": 30000
+          }
+        },
+        "HttpApiRouteGetVisualizar": {
+          "Type": "AWS::ApiGatewayV2::Route",
+          "Properties": {
+            "ApiId": {
+              "Ref": "HttpApi"
+            },
+            "RouteKey": "GET /visualizar",
+            "Target": {
+              "Fn::Join": [
+                "/",
+                [
+                  "integrations",
+                  {
+                    "Ref": "HttpApiIntegrationGetTask"
+                  }
+                ]
+              ]
+            }
+          },
+          "DependsOn": "HttpApiIntegrationGetTask"
         },
         "usersTable": {
           "Type": "AWS::DynamoDB::Table",
@@ -1391,7 +1777,7 @@
         "HelloLambdaFunctionQualifiedArn": {
           "Description": "Current Lambda function version",
           "Value": {
-            "Ref": "HelloLambdaVersionVdz3mpqW4Uku3K7AvzfKyaNmUvrxki2b2qBJRn4To"
+            "Ref": "HelloLambdaVersionLCDzePcoLryIeGhH3V3GU4MDqe3j8oqbZh97l7ZfVyU"
           },
           "Export": {
             "Name": "sls-aws-lambda-dev-HelloLambdaFunctionQualifiedArn"
@@ -1400,10 +1786,19 @@
         "CreateTaskLambdaFunctionQualifiedArn": {
           "Description": "Current Lambda function version",
           "Value": {
-            "Ref": "CreateTaskLambdaVersiondkwvLY6viI3bjvwlT1qauyaQCKr8aew5GFwYbXkj18Q"
+            "Ref": "CreateTaskLambdaVersiondcqU3aeggyLDf0NEx6ZYK2HjIOzMl1aTUHx5kfpSc"
           },
           "Export": {
             "Name": "sls-aws-lambda-dev-CreateTaskLambdaFunctionQualifiedArn"
+          }
+        },
+        "GetTaskLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "GetTaskLambdaVersionn09ofb0aV9Zj3yTaBXmAvGtKZmjKXlHdbczqXYx6Rqg"
+          },
+          "Export": {
+            "Name": "sls-aws-lambda-dev-GetTaskLambdaFunctionQualifiedArn"
           }
         },
         "HttpApiId": {

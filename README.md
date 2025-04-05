@@ -69,6 +69,12 @@ Set-ExecutionPolicy Unrestricted -Scope Process
         serverless remove
         serverless deploy --verbose
 
+    en el codigo colocar
+        console.log(tasks)
+
+    En amazon entrar a cloud watch
+
+
 Pendiente
     Enrutador
     

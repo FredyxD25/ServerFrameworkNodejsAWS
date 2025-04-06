@@ -16,9 +16,10 @@ module.exports.getTasksProject = async (event) => {
 
     const params = {
       TableName: DynamoConfig.tableName,
-      KeyConditionExpression: 'id = :proyectoId',
+      KeyConditionExpression: 'PK = :pk AND begins_with(SK, :sk)',
       ExpressionAttributeValues: {
-        ':proyectoId': `PROYECTO#${proyectoId}`,
+        ':pk': `PROJECT#${proyectoId}`,
+        ':sk': 'TASK#',
       },
     };
 

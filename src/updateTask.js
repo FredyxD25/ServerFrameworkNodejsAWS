@@ -1,46 +1,74 @@
 const AWS = require('aws-sdk');
-const { v4: uuidv4 } = require('uuid');
+const dynamodb = new AWS.DynamoDB.DocumentClient();
 const DynamoConfig = require('../config/dynamoConfig');
 
-const dynamodb = new AWS.DynamoDB.DocumentClient();
-
+// Actualiza una tarea existente usando su taskId y proyectoId
 module.exports.updateTask = async (event) => {
   try {
+    const { id } = event.pathParameters; // taskId desde la URL
     const body = JSON.parse(event.body);
-    const { title, description } = body;
 
-    if (!title || !description) {
+    const { title, description, status, dueDate } = body;
+
+    // Validar campos obligatorios
+    if (!title || !description || !status) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Faltan campos requeridos: title o description' }),
+        body: JSON.stringify({
+          error: "Faltan campos requeridos: title, description, status"
+        }),
       };
     }
 
-    const createdAt = new Date().toISOString();
-    const id = uuidv4();
+    // Se espera que el body también traiga el ID del proyecto (relación PK)
+    const { proyectoId } = body;
 
+    if (!proyectoId) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Falta el campo 'proyectoId'" }),
+      };
+    }
+
+    // Parámetros para actualizar la tarea
     const params = {
       TableName: DynamoConfig.tableName,
-      Item: {
-        id,
-        title,
-        description,
-        createdAt,
+      Key: {
+        PK: `PROJECT#${proyectoId}`,
+        SK: `TASK#${id}`
       },
+      UpdateExpression: "set #title = :title, #description = :description, #status = :status, #dueDate = :dueDate",
+      ExpressionAttributeNames: {
+        "#title": "title",
+        "#description": "description",
+        "#status": "status",
+        "#dueDate": "dueDate"
+      },
+      ExpressionAttributeValues: {
+        ":title": title,
+        ":description": description,
+        ":status": status,
+        ":dueDate": dueDate || null
+      },
+      ReturnValues: "UPDATED_NEW"
     };
 
-    await dynamodb.put(params).promise();
+    const result = await dynamodb.update(params).promise();
 
     return {
-      statusCode: 201,
-      body: JSON.stringify({ message: 'Tarea creada correctamente', id }),
+      statusCode: 200,
+      body: JSON.stringify({
+        message: "Tarea actualizada correctamente",
+        updatedAttributes: result.Attributes
+      }),
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // útil para CORS si accedes desde frontend
+        'Access-Control-Allow-Origin': '*',
       },
     };
+
   } catch (error) {
-    console.error('Error al crear tarea:', error);
+    console.error('Error al actualizar tarea:', error);
 
     return {
       statusCode: 500,

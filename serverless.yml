@@ -3,6 +3,9 @@ org: fredyxd25
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: aws-lambda
 
+custom:
+  tableName: ProyectosTareas
+
 provider:
   name: aws
   runtime: nodejs20.x
@@ -16,8 +19,9 @@ provider:
         - dynamodb:DeleteItem
         - dynamodb:UpdateItem
         - dynamodb:Query
-      Resource: #Cambiar arn cada vez que se cree una nueva tabla
-        - arn:aws:dynamodb:us-east-1:158735973681:table/ProyectosTareas
+      Resource:
+        - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}
+        - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}/index/GSI1
 
 package:
   include:
@@ -42,33 +46,52 @@ functions: #Funciones de Lambda
       - httpApi:
           path: /task/{proyectoId}
           method: get
+  getTasksUser:
+    handler: src/getTasksUser.getTasksUser
+    events:
+      - httpApi:
+          path: /task/user/{userId}/status/{status}
+          method: get
   deleteTask:
     handler: src/deleteTask.deleteTask
     events:
       - httpApi:
-          path: /task/{id}
+          path: /task/{proyectoId}
           method: delete
   updateTask:
     handler: src/updateTask.updateTask
     events:
       - httpApi:
-          path: /task/{id}
+          path: /task/{proyectoId}
           method: put
 
 resources: # Configuracion para DynamoDB
   Resources:
-    usersTable:
+    ProjectSystemTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ProyectosTareas
-        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.tableName}
+        BillingMode: PAY_PER_REQUEST  # Sin preocuparte por capacidad
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: PK
             AttributeType: S
-          - AttributeName: sortKey
+          - AttributeName: SK
+            AttributeType: S
+          - AttributeName: GSI1PK
+            AttributeType: S
+          - AttributeName: GSI1SK
             AttributeType: S
         KeySchema:
-          - AttributeName: id
-            KeyType: HASH   # Partition Key
-          - AttributeName: sortKey
-            KeyType: RANGE  # Sort Key
+          - AttributeName: PK
+            KeyType: HASH
+          - AttributeName: SK
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: GSI1
+            KeySchema:
+              - AttributeName: GSI1PK
+                KeyType: HASH
+              - AttributeName: GSI1SK
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL

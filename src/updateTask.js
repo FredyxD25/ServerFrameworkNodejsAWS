@@ -1,37 +1,49 @@
 const AWS = require('aws-sdk');
+const { v4: uuidv4 } = require('uuid');
+
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.updateTask = async (event) => {
   try {
-    const { id } = event.pathParameters;
-    const { title, description } = JSON.parse(event.body);
-    const updatedAt = new Date().toISOString();
+    const body = JSON.parse(event.body);
+    const { title, description } = body;
+
+    if (!title || !description) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Faltan campos requeridos: title o description' }),
+      };
+    }
+
+    const createdAt = new Date().toISOString();
+    const id = uuidv4();
 
     const params = {
       TableName: 'TablaPrueba',
-      Key: { id },
-      UpdateExpression: 'set title = :title, description = :desc, updatedAt = :updatedAt',
-      ExpressionAttributeValues: {
-        ':title': title,
-        ':desc': description,
-        ':updatedAt': updatedAt,
+      Item: {
+        id,
+        title,
+        description,
+        createdAt,
       },
-      ReturnValues: 'ALL_NEW',
     };
 
-    const result = await dynamodb.update(params).promise();
+    await dynamodb.put(params).promise();
 
     return {
-      statusCode: 200,
-      body: JSON.stringify({ message: 'Tarea actualizada correctamente', tarea: result.Attributes }),
+      statusCode: 201,
+      body: JSON.stringify({ message: 'Tarea creada correctamente', id }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // útil para CORS si accedes desde frontend
+      },
     };
-
   } catch (error) {
-    console.error('Error al actualizar tarea:', error);
+    console.error('Error al crear tarea:', error);
 
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Error al actualizar la tarea' }),
+      body: JSON.stringify({ error: 'Error interno del servidor' }),
     };
   }
 };

@@ -17,7 +17,9 @@
               "dynamodb:PutItem",
               "dynamodb:GetItem",
               "dynamodb:Scan",
-              "dynamodb:DeleteItem"
+              "dynamodb:DeleteItem",
+              "dynamodb:UpdateItem",
+              "dynamodb:Query"
             ],
             "Resource": "arn:aws:dynamodb:us-east-1:158735973681:table/ProyectosTareas"
           }
@@ -38,6 +40,12 @@
               "Type": "AWS::Logs::LogGroup",
               "Properties": {
                 "LogGroupName": "/aws/lambda/aws-lambda-dev-getTask"
+              }
+            },
+            "GetTasksProjectLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/aws-lambda-dev-getTasksProject"
               }
             },
             "DeleteTaskLogGroup": {
@@ -116,7 +124,9 @@
                             "dynamodb:PutItem",
                             "dynamodb:GetItem",
                             "dynamodb:Scan",
-                            "dynamodb:DeleteItem"
+                            "dynamodb:DeleteItem",
+                            "dynamodb:UpdateItem",
+                            "dynamodb:Query"
                           ],
                           "Resource": "arn:aws:dynamodb:us-east-1:158735973681:table/ProyectosTareas"
                         }
@@ -145,7 +155,7 @@
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                  "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+                  "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
                 },
                 "Handler": "src/postTask.postTask",
                 "Runtime": "nodejs20.x",
@@ -168,7 +178,7 @@
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                  "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+                  "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
                 },
                 "Handler": "src/getTask.getTask",
                 "Runtime": "nodejs20.x",
@@ -186,12 +196,35 @@
                 "GetTaskLogGroup"
               ]
             },
+            "GetTasksProjectLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
+                  "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
+                },
+                "Handler": "src/getTasksProject.getTasksProject",
+                "Runtime": "nodejs20.x",
+                "FunctionName": "aws-lambda-dev-getTasksProject",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "GetTasksProjectLogGroup"
+              ]
+            },
             "DeleteTaskLambdaFunction": {
               "Type": "AWS::Lambda::Function",
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                  "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+                  "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
                 },
                 "Handler": "src/deleteTask.deleteTask",
                 "Runtime": "nodejs20.x",
@@ -214,7 +247,7 @@
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                  "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+                  "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
                 },
                 "Handler": "src/updateTask.updateTask",
                 "Runtime": "nodejs20.x",
@@ -232,44 +265,54 @@
                 "UpdateTaskLogGroup"
               ]
             },
-            "PostTaskLambdaVersionVe8hRJM8EBXNmR60IQyKwvIA0cBL8zHferWdx8RdQZI": {
+            "PostTaskLambdaVersionZkVR0CAp9bAMqDso1pRPYMhxbtcQataWrrtMYdkr0Ic": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "PostTaskLambdaFunction"
                 },
-                "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+                "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
               }
             },
-            "GetTaskLambdaVersionxQVHhGTD97itMhKk5O669hbOdyAVmLIRVohkRPpAE4": {
+            "GetTaskLambdaVersionwLDnhMNDooyQghNNYjRRRWJUriwDeMv7q1ylcdlYA": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "GetTaskLambdaFunction"
                 },
-                "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+                "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
               }
             },
-            "DeleteTaskLambdaVersion28uWUrnqfTkguhtcUMCceL5uTermUxankZakNdBArI": {
+            "GetTasksProjectLambdaVersionHlWTdZlotaCFtxZFlUpxx0bmEg4oRPrETlwuUffoYGo": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "GetTasksProjectLambdaFunction"
+                },
+                "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
+              }
+            },
+            "DeleteTaskLambdaVersioneZeY5V2BTSdhoWerk3iejM8w8qxzSNiTgpp13HF8ko": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "DeleteTaskLambdaFunction"
                 },
-                "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+                "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
               }
             },
-            "UpdateTaskLambdaVersion9AR8xIuVQ9Ul4SF1zXTUeBIYaZz0Kk3WDHOdQE1s0Y": {
+            "UpdateTaskLambdaVersionExIv7ZR1rC7qPRCQpr8XgLV5cbuKmdzuqXNRfhXERM": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "UpdateTaskLambdaFunction"
                 },
-                "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+                "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
               }
             },
             "HttpApi": {
@@ -441,6 +484,81 @@
                 }
               },
               "DependsOn": "HttpApiIntegrationGetTask"
+            },
+            "GetTasksProjectLambdaPermissionHttpApi": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "GetTasksProjectLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "HttpApi"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "HttpApiIntegrationGetTasksProject": {
+              "Type": "AWS::ApiGatewayV2::Integration",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "IntegrationType": "AWS_PROXY",
+                "IntegrationUri": {
+                  "Fn::GetAtt": [
+                    "GetTasksProjectLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "PayloadFormatVersion": "2.0",
+                "TimeoutInMillis": 30000
+              }
+            },
+            "HttpApiRouteGetTaskProyectoidVar": {
+              "Type": "AWS::ApiGatewayV2::Route",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "RouteKey": "GET /task/{proyectoId}",
+                "Target": {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      "integrations",
+                      {
+                        "Ref": "HttpApiIntegrationGetTasksProject"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "DependsOn": "HttpApiIntegrationGetTasksProject"
             },
             "DeleteTaskLambdaPermissionHttpApi": {
               "Type": "AWS::Lambda::Permission",
@@ -630,7 +748,7 @@
             "PostTaskLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "PostTaskLambdaVersionVe8hRJM8EBXNmR60IQyKwvIA0cBL8zHferWdx8RdQZI"
+                "Ref": "PostTaskLambdaVersionZkVR0CAp9bAMqDso1pRPYMhxbtcQataWrrtMYdkr0Ic"
               },
               "Export": {
                 "Name": "sls-aws-lambda-dev-PostTaskLambdaFunctionQualifiedArn"
@@ -639,16 +757,25 @@
             "GetTaskLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "GetTaskLambdaVersionxQVHhGTD97itMhKk5O669hbOdyAVmLIRVohkRPpAE4"
+                "Ref": "GetTaskLambdaVersionwLDnhMNDooyQghNNYjRRRWJUriwDeMv7q1ylcdlYA"
               },
               "Export": {
                 "Name": "sls-aws-lambda-dev-GetTaskLambdaFunctionQualifiedArn"
               }
             },
+            "GetTasksProjectLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "GetTasksProjectLambdaVersionHlWTdZlotaCFtxZFlUpxx0bmEg4oRPrETlwuUffoYGo"
+              },
+              "Export": {
+                "Name": "sls-aws-lambda-dev-GetTasksProjectLambdaFunctionQualifiedArn"
+              }
+            },
             "DeleteTaskLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "DeleteTaskLambdaVersion28uWUrnqfTkguhtcUMCceL5uTermUxankZakNdBArI"
+                "Ref": "DeleteTaskLambdaVersioneZeY5V2BTSdhoWerk3iejM8w8qxzSNiTgpp13HF8ko"
               },
               "Export": {
                 "Name": "sls-aws-lambda-dev-DeleteTaskLambdaFunctionQualifiedArn"
@@ -657,7 +784,7 @@
             "UpdateTaskLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "UpdateTaskLambdaVersion9AR8xIuVQ9Ul4SF1zXTUeBIYaZz0Kk3WDHOdQE1s0Y"
+                "Ref": "UpdateTaskLambdaVersionExIv7ZR1rC7qPRCQpr8XgLV5cbuKmdzuqXNRfhXERM"
               },
               "Export": {
                 "Name": "sls-aws-lambda-dev-UpdateTaskLambdaFunctionQualifiedArn"
@@ -708,7 +835,7 @@
         "artifactsS3KeyDirname": "serverless/aws-lambda/dev/code-artifacts",
         "deploymentBucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
         "artifact": "D:\\Datos Fredy\\Programacion\\ServerFrameworkNodejsAWS\\.serverless\\aws-lambda.zip",
-        "artifactDirectoryName": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z"
+        "artifactDirectoryName": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z"
       },
       "functions": {
         "postTask": {
@@ -729,7 +856,7 @@
           "timeout": 6,
           "runtime": "nodejs20.x",
           "vpc": {},
-          "versionLogicalId": "PostTaskLambdaVersionVe8hRJM8EBXNmR60IQyKwvIA0cBL8zHferWdx8RdQZI"
+          "versionLogicalId": "PostTaskLambdaVersionZkVR0CAp9bAMqDso1pRPYMhxbtcQataWrrtMYdkr0Ic"
         },
         "getTask": {
           "handler": "src/getTask.getTask",
@@ -749,7 +876,27 @@
           "timeout": 6,
           "runtime": "nodejs20.x",
           "vpc": {},
-          "versionLogicalId": "GetTaskLambdaVersionxQVHhGTD97itMhKk5O669hbOdyAVmLIRVohkRPpAE4"
+          "versionLogicalId": "GetTaskLambdaVersionwLDnhMNDooyQghNNYjRRRWJUriwDeMv7q1ylcdlYA"
+        },
+        "getTasksProject": {
+          "handler": "src/getTasksProject.getTasksProject",
+          "events": [
+            {
+              "httpApi": {
+                "path": "/task/{proyectoId}",
+                "method": "get"
+              },
+              "resolvedMethod": "GET",
+              "resolvedPath": "/task/{proyectoId}"
+            }
+          ],
+          "name": "aws-lambda-dev-getTasksProject",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs20.x",
+          "vpc": {},
+          "versionLogicalId": "GetTasksProjectLambdaVersionHlWTdZlotaCFtxZFlUpxx0bmEg4oRPrETlwuUffoYGo"
         },
         "deleteTask": {
           "handler": "src/deleteTask.deleteTask",
@@ -769,7 +916,7 @@
           "timeout": 6,
           "runtime": "nodejs20.x",
           "vpc": {},
-          "versionLogicalId": "DeleteTaskLambdaVersion28uWUrnqfTkguhtcUMCceL5uTermUxankZakNdBArI"
+          "versionLogicalId": "DeleteTaskLambdaVersioneZeY5V2BTSdhoWerk3iejM8w8qxzSNiTgpp13HF8ko"
         },
         "updateTask": {
           "handler": "src/updateTask.updateTask",
@@ -789,7 +936,7 @@
           "timeout": 6,
           "runtime": "nodejs20.x",
           "vpc": {},
-          "versionLogicalId": "UpdateTaskLambdaVersion9AR8xIuVQ9Ul4SF1zXTUeBIYaZz0Kk3WDHOdQE1s0Y"
+          "versionLogicalId": "UpdateTaskLambdaVersionExIv7ZR1rC7qPRCQpr8XgLV5cbuKmdzuqXNRfhXERM"
         }
       },
       "resources": {
@@ -836,7 +983,9 @@
             "dynamodb:PutItem",
             "dynamodb:GetItem",
             "dynamodb:Scan",
-            "dynamodb:DeleteItem"
+            "dynamodb:DeleteItem",
+            "dynamodb:UpdateItem",
+            "dynamodb:Query"
           ],
           "Resource": "arn:aws:dynamodb:us-east-1:158735973681:table/ProyectosTareas"
         }
@@ -857,6 +1006,12 @@
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
               "LogGroupName": "/aws/lambda/aws-lambda-dev-getTask"
+            }
+          },
+          "GetTasksProjectLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/aws-lambda-dev-getTasksProject"
             }
           },
           "DeleteTaskLogGroup": {
@@ -935,7 +1090,9 @@
                           "dynamodb:PutItem",
                           "dynamodb:GetItem",
                           "dynamodb:Scan",
-                          "dynamodb:DeleteItem"
+                          "dynamodb:DeleteItem",
+                          "dynamodb:UpdateItem",
+                          "dynamodb:Query"
                         ],
                         "Resource": "arn:aws:dynamodb:us-east-1:158735973681:table/ProyectosTareas"
                       }
@@ -964,7 +1121,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+                "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
               },
               "Handler": "src/postTask.postTask",
               "Runtime": "nodejs20.x",
@@ -987,7 +1144,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+                "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
               },
               "Handler": "src/getTask.getTask",
               "Runtime": "nodejs20.x",
@@ -1005,12 +1162,35 @@
               "GetTaskLogGroup"
             ]
           },
+          "GetTasksProjectLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
+                "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
+              },
+              "Handler": "src/getTasksProject.getTasksProject",
+              "Runtime": "nodejs20.x",
+              "FunctionName": "aws-lambda-dev-getTasksProject",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "GetTasksProjectLogGroup"
+            ]
+          },
           "DeleteTaskLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+                "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
               },
               "Handler": "src/deleteTask.deleteTask",
               "Runtime": "nodejs20.x",
@@ -1033,7 +1213,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-                "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+                "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
               },
               "Handler": "src/updateTask.updateTask",
               "Runtime": "nodejs20.x",
@@ -1051,44 +1231,54 @@
               "UpdateTaskLogGroup"
             ]
           },
-          "PostTaskLambdaVersionVe8hRJM8EBXNmR60IQyKwvIA0cBL8zHferWdx8RdQZI": {
+          "PostTaskLambdaVersionZkVR0CAp9bAMqDso1pRPYMhxbtcQataWrrtMYdkr0Ic": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "PostTaskLambdaFunction"
               },
-              "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+              "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
             }
           },
-          "GetTaskLambdaVersionxQVHhGTD97itMhKk5O669hbOdyAVmLIRVohkRPpAE4": {
+          "GetTaskLambdaVersionwLDnhMNDooyQghNNYjRRRWJUriwDeMv7q1ylcdlYA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetTaskLambdaFunction"
               },
-              "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+              "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
             }
           },
-          "DeleteTaskLambdaVersion28uWUrnqfTkguhtcUMCceL5uTermUxankZakNdBArI": {
+          "GetTasksProjectLambdaVersionHlWTdZlotaCFtxZFlUpxx0bmEg4oRPrETlwuUffoYGo": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetTasksProjectLambdaFunction"
+              },
+              "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
+            }
+          },
+          "DeleteTaskLambdaVersioneZeY5V2BTSdhoWerk3iejM8w8qxzSNiTgpp13HF8ko": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeleteTaskLambdaFunction"
               },
-              "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+              "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
             }
           },
-          "UpdateTaskLambdaVersion9AR8xIuVQ9Ul4SF1zXTUeBIYaZz0Kk3WDHOdQE1s0Y": {
+          "UpdateTaskLambdaVersionExIv7ZR1rC7qPRCQpr8XgLV5cbuKmdzuqXNRfhXERM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateTaskLambdaFunction"
               },
-              "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+              "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
             }
           },
           "HttpApi": {
@@ -1260,6 +1450,81 @@
               }
             },
             "DependsOn": "HttpApiIntegrationGetTask"
+          },
+          "GetTasksProjectLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetTasksProjectLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationGetTasksProject": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "Fn::GetAtt": [
+                  "GetTasksProjectLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetTaskProyectoidVar": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /task/{proyectoId}",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationGetTasksProject"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationGetTasksProject"
           },
           "DeleteTaskLambdaPermissionHttpApi": {
             "Type": "AWS::Lambda::Permission",
@@ -1449,7 +1714,7 @@
           "PostTaskLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "PostTaskLambdaVersionVe8hRJM8EBXNmR60IQyKwvIA0cBL8zHferWdx8RdQZI"
+              "Ref": "PostTaskLambdaVersionZkVR0CAp9bAMqDso1pRPYMhxbtcQataWrrtMYdkr0Ic"
             },
             "Export": {
               "Name": "sls-aws-lambda-dev-PostTaskLambdaFunctionQualifiedArn"
@@ -1458,16 +1723,25 @@
           "GetTaskLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetTaskLambdaVersionxQVHhGTD97itMhKk5O669hbOdyAVmLIRVohkRPpAE4"
+              "Ref": "GetTaskLambdaVersionwLDnhMNDooyQghNNYjRRRWJUriwDeMv7q1ylcdlYA"
             },
             "Export": {
               "Name": "sls-aws-lambda-dev-GetTaskLambdaFunctionQualifiedArn"
             }
           },
+          "GetTasksProjectLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetTasksProjectLambdaVersionHlWTdZlotaCFtxZFlUpxx0bmEg4oRPrETlwuUffoYGo"
+            },
+            "Export": {
+              "Name": "sls-aws-lambda-dev-GetTasksProjectLambdaFunctionQualifiedArn"
+            }
+          },
           "DeleteTaskLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeleteTaskLambdaVersion28uWUrnqfTkguhtcUMCceL5uTermUxankZakNdBArI"
+              "Ref": "DeleteTaskLambdaVersioneZeY5V2BTSdhoWerk3iejM8w8qxzSNiTgpp13HF8ko"
             },
             "Export": {
               "Name": "sls-aws-lambda-dev-DeleteTaskLambdaFunctionQualifiedArn"
@@ -1476,7 +1750,7 @@
           "UpdateTaskLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateTaskLambdaVersion9AR8xIuVQ9Ul4SF1zXTUeBIYaZz0Kk3WDHOdQE1s0Y"
+              "Ref": "UpdateTaskLambdaVersionExIv7ZR1rC7qPRCQpr8XgLV5cbuKmdzuqXNRfhXERM"
             },
             "Export": {
               "Name": "sls-aws-lambda-dev-UpdateTaskLambdaFunctionQualifiedArn"
@@ -1529,7 +1803,7 @@
       "serviceProvider": null,
       "instanceParameters": null
     },
-    "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\r\norg: fredyxd25\r\n# \"service\" is the name of this project. This will also be added to your AWS resource names.\r\nservice: aws-lambda\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs20.x\r\n  region: us-east-1\r\n  iamRoleStatements:\r\n    - Effect: Allow\r\n      Action:\r\n        - dynamodb:PutItem\r\n        - dynamodb:GetItem\r\n        - dynamodb:Scan\r\n        - dynamodb:DeleteItem\r\n      Resource: #Cambiar arn cada vez que se cree una nueva tabla\r\n        - arn:aws:dynamodb:us-east-1:158735973681:table/ProyectosTareas\r\n\r\npackage:\r\n  include:\r\n    - node_modules/aws-sdk/**\r\n\r\nfunctions:\r\n  postTask:\r\n    handler: src/postTask.postTask\r\n    events:\r\n      - httpApi:\r\n          path: /task\r\n          method: post\r\n  getTask:\r\n    handler: src/getTask.getTask\r\n    events:\r\n      - httpApi:\r\n          path: /task\r\n          method: get\r\n  deleteTask:\r\n    handler: src/deleteTask.deleteTask\r\n    events:\r\n      - httpApi:\r\n          path: /task/{id}\r\n          method: delete\r\n  updateTask:\r\n    handler: src/updateTask.updateTask\r\n    events:\r\n      - httpApi:\r\n          path: /task/{id}\r\n          method: put\r\n\r\nresources: # Configuracion para DynamoDB\r\n  Resources:\r\n    usersTable:\r\n      Type: AWS::DynamoDB::Table\r\n      Properties:\r\n        TableName: ProyectosTareas\r\n        BillingMode: PAY_PER_REQUEST\r\n        AttributeDefinitions:\r\n          - AttributeName: id\r\n            AttributeType: S\r\n          - AttributeName: sortKey\r\n            AttributeType: S\r\n        KeySchema:\r\n          - AttributeName: id\r\n            KeyType: HASH   # Partition Key\r\n          - AttributeName: sortKey\r\n            KeyType: RANGE  # Sort Key\r\n",
+    "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\r\norg: fredyxd25\r\n# \"service\" is the name of this project. This will also be added to your AWS resource names.\r\nservice: aws-lambda\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs20.x\r\n  region: us-east-1\r\n  iamRoleStatements:\r\n    - Effect: Allow\r\n      Action:\r\n        - dynamodb:PutItem\r\n        - dynamodb:GetItem\r\n        - dynamodb:Scan\r\n        - dynamodb:DeleteItem\r\n        - dynamodb:UpdateItem\r\n        - dynamodb:Query\r\n      Resource: #Cambiar arn cada vez que se cree una nueva tabla\r\n        - arn:aws:dynamodb:us-east-1:158735973681:table/ProyectosTareas\r\n\r\npackage:\r\n  include:\r\n    - node_modules/aws-sdk/**\r\n\r\nfunctions: #Funciones de Lambda\r\n  postTask:\r\n    handler: src/postTask.postTask\r\n    events:\r\n      - httpApi:\r\n          path: /task\r\n          method: post\r\n  getTask:\r\n    handler: src/getTask.getTask\r\n    events:\r\n      - httpApi:\r\n          path: /task\r\n          method: get\r\n  getTasksProject:\r\n    handler: src/getTasksProject.getTasksProject\r\n    events:\r\n      - httpApi:\r\n          path: /task/{proyectoId}\r\n          method: get\r\n  deleteTask:\r\n    handler: src/deleteTask.deleteTask\r\n    events:\r\n      - httpApi:\r\n          path: /task/{id}\r\n          method: delete\r\n  updateTask:\r\n    handler: src/updateTask.updateTask\r\n    events:\r\n      - httpApi:\r\n          path: /task/{id}\r\n          method: put\r\n\r\nresources: # Configuracion para DynamoDB\r\n  Resources:\r\n    usersTable:\r\n      Type: AWS::DynamoDB::Table\r\n      Properties:\r\n        TableName: ProyectosTareas\r\n        BillingMode: PAY_PER_REQUEST\r\n        AttributeDefinitions:\r\n          - AttributeName: id\r\n            AttributeType: S\r\n          - AttributeName: sortKey\r\n            AttributeType: S\r\n        KeySchema:\r\n          - AttributeName: id\r\n            KeyType: HASH   # Partition Key\r\n          - AttributeName: sortKey\r\n            KeyType: RANGE  # Sort Key\r\n",
     "command": [
       "deploy"
     ],
@@ -1542,38 +1816,44 @@
     "userName": "fredyxd25",
     "serviceProviderAwsAccountId": "158735973681",
     "serviceProviderAwsCfStackName": "aws-lambda-dev",
-    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:158735973681:stack/aws-lambda-dev/38795710-11e3-11f0-9a35-12b4b457fe5b",
-    "serviceProviderAwsCfStackCreated": "2025-04-05T06:00:05.220Z",
-    "serviceProviderAwsCfStackUpdated": "2025-04-06T20:08:27.184Z",
-    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:158735973681:stack/aws-lambda-dev/8a25e670-1326-11f0-b965-0e96212caa6b",
+    "serviceProviderAwsCfStackCreated": "2025-04-06T20:34:29.731Z",
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": "CREATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "DeleteTaskLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-deleteTask:17",
+        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-deleteTask:22",
         "Description": "Current Lambda function version",
         "ExportName": "sls-aws-lambda-dev-DeleteTaskLambdaFunctionQualifiedArn"
       },
       {
+        "OutputKey": "GetTasksProjectLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-getTasksProject:3",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-aws-lambda-dev-GetTasksProjectLambdaFunctionQualifiedArn"
+      },
+      {
         "OutputKey": "UpdateTaskLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-updateTask:13",
+        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-updateTask:18",
         "Description": "Current Lambda function version",
         "ExportName": "sls-aws-lambda-dev-UpdateTaskLambdaFunctionQualifiedArn"
       },
       {
         "OutputKey": "PostTaskLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-postTask:18",
+        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-postTask:23",
         "Description": "Current Lambda function version",
         "ExportName": "sls-aws-lambda-dev-PostTaskLambdaFunctionQualifiedArn"
       },
       {
         "OutputKey": "HttpApiId",
-        "OutputValue": "r532olcxzk",
+        "OutputValue": "rmpxgpk6s3",
         "Description": "Id of the HTTP API",
         "ExportName": "sls-aws-lambda-dev-HttpApiId"
       },
       {
         "OutputKey": "GetTaskLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-getTask:32",
+        "OutputValue": "arn:aws:lambda:us-east-1:158735973681:function:aws-lambda-dev-getTask:37",
         "Description": "Current Lambda function version",
         "ExportName": "sls-aws-lambda-dev-GetTaskLambdaFunctionQualifiedArn"
       },
@@ -1584,7 +1864,7 @@
       },
       {
         "OutputKey": "HttpApiUrl",
-        "OutputValue": "https://r532olcxzk.execute-api.us-east-1.amazonaws.com",
+        "OutputValue": "https://rmpxgpk6s3.execute-api.us-east-1.amazonaws.com",
         "Description": "URL of the HTTP API",
         "ExportName": "sls-aws-lambda-dev-HttpApiUrl"
       }
@@ -1603,6 +1883,12 @@
           "Type": "AWS::Logs::LogGroup",
           "Properties": {
             "LogGroupName": "/aws/lambda/aws-lambda-dev-getTask"
+          }
+        },
+        "GetTasksProjectLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/aws-lambda-dev-getTasksProject"
           }
         },
         "DeleteTaskLogGroup": {
@@ -1681,7 +1967,9 @@
                         "dynamodb:PutItem",
                         "dynamodb:GetItem",
                         "dynamodb:Scan",
-                        "dynamodb:DeleteItem"
+                        "dynamodb:DeleteItem",
+                        "dynamodb:UpdateItem",
+                        "dynamodb:Query"
                       ],
                       "Resource": "arn:aws:dynamodb:us-east-1:158735973681:table/ProyectosTareas"
                     }
@@ -1710,7 +1998,7 @@
           "Properties": {
             "Code": {
               "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-              "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+              "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
             },
             "Handler": "src/postTask.postTask",
             "Runtime": "nodejs20.x",
@@ -1733,7 +2021,7 @@
           "Properties": {
             "Code": {
               "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-              "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+              "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
             },
             "Handler": "src/getTask.getTask",
             "Runtime": "nodejs20.x",
@@ -1751,12 +2039,35 @@
             "GetTaskLogGroup"
           ]
         },
+        "GetTasksProjectLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
+              "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
+            },
+            "Handler": "src/getTasksProject.getTasksProject",
+            "Runtime": "nodejs20.x",
+            "FunctionName": "aws-lambda-dev-getTasksProject",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "GetTasksProjectLogGroup"
+          ]
+        },
         "DeleteTaskLambdaFunction": {
           "Type": "AWS::Lambda::Function",
           "Properties": {
             "Code": {
               "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-              "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+              "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
             },
             "Handler": "src/deleteTask.deleteTask",
             "Runtime": "nodejs20.x",
@@ -1779,7 +2090,7 @@
           "Properties": {
             "Code": {
               "S3Bucket": "serverless-framework-deployments-us-east-1-8df7a401-01f5",
-              "S3Key": "serverless/aws-lambda/dev/1743970250578-2025-04-06T20:10:50.578Z/aws-lambda.zip"
+              "S3Key": "serverless/aws-lambda/dev/1743972023995-2025-04-06T20:40:23.995Z/aws-lambda.zip"
             },
             "Handler": "src/updateTask.updateTask",
             "Runtime": "nodejs20.x",
@@ -1797,44 +2108,54 @@
             "UpdateTaskLogGroup"
           ]
         },
-        "PostTaskLambdaVersionVe8hRJM8EBXNmR60IQyKwvIA0cBL8zHferWdx8RdQZI": {
+        "PostTaskLambdaVersionZkVR0CAp9bAMqDso1pRPYMhxbtcQataWrrtMYdkr0Ic": {
           "Type": "AWS::Lambda::Version",
           "DeletionPolicy": "Retain",
           "Properties": {
             "FunctionName": {
               "Ref": "PostTaskLambdaFunction"
             },
-            "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+            "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
           }
         },
-        "GetTaskLambdaVersionxQVHhGTD97itMhKk5O669hbOdyAVmLIRVohkRPpAE4": {
+        "GetTaskLambdaVersionwLDnhMNDooyQghNNYjRRRWJUriwDeMv7q1ylcdlYA": {
           "Type": "AWS::Lambda::Version",
           "DeletionPolicy": "Retain",
           "Properties": {
             "FunctionName": {
               "Ref": "GetTaskLambdaFunction"
             },
-            "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+            "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
           }
         },
-        "DeleteTaskLambdaVersion28uWUrnqfTkguhtcUMCceL5uTermUxankZakNdBArI": {
+        "GetTasksProjectLambdaVersionHlWTdZlotaCFtxZFlUpxx0bmEg4oRPrETlwuUffoYGo": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "GetTasksProjectLambdaFunction"
+            },
+            "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
+          }
+        },
+        "DeleteTaskLambdaVersioneZeY5V2BTSdhoWerk3iejM8w8qxzSNiTgpp13HF8ko": {
           "Type": "AWS::Lambda::Version",
           "DeletionPolicy": "Retain",
           "Properties": {
             "FunctionName": {
               "Ref": "DeleteTaskLambdaFunction"
             },
-            "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+            "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
           }
         },
-        "UpdateTaskLambdaVersion9AR8xIuVQ9Ul4SF1zXTUeBIYaZz0Kk3WDHOdQE1s0Y": {
+        "UpdateTaskLambdaVersionExIv7ZR1rC7qPRCQpr8XgLV5cbuKmdzuqXNRfhXERM": {
           "Type": "AWS::Lambda::Version",
           "DeletionPolicy": "Retain",
           "Properties": {
             "FunctionName": {
               "Ref": "UpdateTaskLambdaFunction"
             },
-            "CodeSha256": "sOghVbeLnc7Yzr1BrxgJtW+2r5Z7oZILQypdhGXGJiQ="
+            "CodeSha256": "AZqMbRwITxPn1cYmt4sdSuRTo/iBNDyW/t0I151AdTg="
           }
         },
         "HttpApi": {
@@ -2006,6 +2327,81 @@
             }
           },
           "DependsOn": "HttpApiIntegrationGetTask"
+        },
+        "GetTasksProjectLambdaPermissionHttpApi": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "GetTasksProjectLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "HttpApi"
+                  },
+                  "/*"
+                ]
+              ]
+            }
+          }
+        },
+        "HttpApiIntegrationGetTasksProject": {
+          "Type": "AWS::ApiGatewayV2::Integration",
+          "Properties": {
+            "ApiId": {
+              "Ref": "HttpApi"
+            },
+            "IntegrationType": "AWS_PROXY",
+            "IntegrationUri": {
+              "Fn::GetAtt": [
+                "GetTasksProjectLambdaFunction",
+                "Arn"
+              ]
+            },
+            "PayloadFormatVersion": "2.0",
+            "TimeoutInMillis": 30000
+          }
+        },
+        "HttpApiRouteGetTaskProyectoidVar": {
+          "Type": "AWS::ApiGatewayV2::Route",
+          "Properties": {
+            "ApiId": {
+              "Ref": "HttpApi"
+            },
+            "RouteKey": "GET /task/{proyectoId}",
+            "Target": {
+              "Fn::Join": [
+                "/",
+                [
+                  "integrations",
+                  {
+                    "Ref": "HttpApiIntegrationGetTasksProject"
+                  }
+                ]
+              ]
+            }
+          },
+          "DependsOn": "HttpApiIntegrationGetTasksProject"
         },
         "DeleteTaskLambdaPermissionHttpApi": {
           "Type": "AWS::Lambda::Permission",
@@ -2195,7 +2591,7 @@
         "PostTaskLambdaFunctionQualifiedArn": {
           "Description": "Current Lambda function version",
           "Value": {
-            "Ref": "PostTaskLambdaVersionVe8hRJM8EBXNmR60IQyKwvIA0cBL8zHferWdx8RdQZI"
+            "Ref": "PostTaskLambdaVersionZkVR0CAp9bAMqDso1pRPYMhxbtcQataWrrtMYdkr0Ic"
           },
           "Export": {
             "Name": "sls-aws-lambda-dev-PostTaskLambdaFunctionQualifiedArn"
@@ -2204,16 +2600,25 @@
         "GetTaskLambdaFunctionQualifiedArn": {
           "Description": "Current Lambda function version",
           "Value": {
-            "Ref": "GetTaskLambdaVersionxQVHhGTD97itMhKk5O669hbOdyAVmLIRVohkRPpAE4"
+            "Ref": "GetTaskLambdaVersionwLDnhMNDooyQghNNYjRRRWJUriwDeMv7q1ylcdlYA"
           },
           "Export": {
             "Name": "sls-aws-lambda-dev-GetTaskLambdaFunctionQualifiedArn"
           }
         },
+        "GetTasksProjectLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "GetTasksProjectLambdaVersionHlWTdZlotaCFtxZFlUpxx0bmEg4oRPrETlwuUffoYGo"
+          },
+          "Export": {
+            "Name": "sls-aws-lambda-dev-GetTasksProjectLambdaFunctionQualifiedArn"
+          }
+        },
         "DeleteTaskLambdaFunctionQualifiedArn": {
           "Description": "Current Lambda function version",
           "Value": {
-            "Ref": "DeleteTaskLambdaVersion28uWUrnqfTkguhtcUMCceL5uTermUxankZakNdBArI"
+            "Ref": "DeleteTaskLambdaVersioneZeY5V2BTSdhoWerk3iejM8w8qxzSNiTgpp13HF8ko"
           },
           "Export": {
             "Name": "sls-aws-lambda-dev-DeleteTaskLambdaFunctionQualifiedArn"
@@ -2222,7 +2627,7 @@
         "UpdateTaskLambdaFunctionQualifiedArn": {
           "Description": "Current Lambda function version",
           "Value": {
-            "Ref": "UpdateTaskLambdaVersion9AR8xIuVQ9Ul4SF1zXTUeBIYaZz0Kk3WDHOdQE1s0Y"
+            "Ref": "UpdateTaskLambdaVersionExIv7ZR1rC7qPRCQpr8XgLV5cbuKmdzuqXNRfhXERM"
           },
           "Export": {
             "Name": "sls-aws-lambda-dev-UpdateTaskLambdaFunctionQualifiedArn"

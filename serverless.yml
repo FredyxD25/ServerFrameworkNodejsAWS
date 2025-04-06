@@ -14,6 +14,8 @@ provider:
         - dynamodb:GetItem
         - dynamodb:Scan
         - dynamodb:DeleteItem
+        - dynamodb:UpdateItem
+        - dynamodb:Query
       Resource: #Cambiar arn cada vez que se cree una nueva tabla
         - arn:aws:dynamodb:us-east-1:158735973681:table/ProyectosTareas
 
@@ -33,6 +35,12 @@ functions: #Funciones de Lambda
     events:
       - httpApi:
           path: /task
+          method: get
+  getTasksProject:
+    handler: src/getTasksProject.getTasksProject
+    events:
+      - httpApi:
+          path: /task/{proyectoId}
           method: get
   deleteTask:
     handler: src/deleteTask.deleteTask

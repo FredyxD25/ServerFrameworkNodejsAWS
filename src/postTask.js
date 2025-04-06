@@ -1,23 +1,31 @@
 const AWS = require('aws-sdk');
 const { v4 } = require('uuid');
-const DynamoConfig = require('./dynamoConfig');
+const DynamoConfig = require('../config/dynamoConfig');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.postTask = async (event) => {
   try {
-    
-    const { nombre, usuarioAsignado, texto} = JSON.parse(event.body);
+    // Parsear el body
+    const { title, description, usuarioAsignado, proyectoId } = JSON.parse(event.body);
+
+    if (!proyectoId) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "El campo 'proyectoId' es obligatorio." }),
+      };
+    }
+
     const createdAt = new Date().toISOString();
-    const id = v4();
+    const taskId = v4(); // UUID único para la tarea
 
     const params = {
       TableName: DynamoConfig.tableName,
       Item: {
-        id: `PROYECTO#1`,                   // Partition Key
-        sortKey: `TAREA#${id}`,             // Sort Key
-        nombre,
-        texto,
+        id: `PROYECTO#${proyectoId}`,       // PK dinámica
+        sortKey: `TAREA#${taskId}`,         // SK única por tarea
+        nombre: title,
+        descripcion: description,
         usuarioAsignado,
         createdAt,
       },
@@ -27,7 +35,11 @@ module.exports.postTask = async (event) => {
 
     return {
       statusCode: 201,
-      body: JSON.stringify({ message: 'Tarea creada correctamente', id }),
+      body: JSON.stringify({
+        message: 'Tarea creada correctamente',
+        proyectoId,
+        taskId,
+      }),
     };
 
   } catch (error) {

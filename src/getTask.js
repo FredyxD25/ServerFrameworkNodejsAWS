@@ -1,10 +1,11 @@
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
+const DynamoConfig = require('./dynamoConfig');
 
 module.exports.getTask = async () => {
   try {
     const params = {
-      TableName: 'TablaPrueba',
+      TableName: DynamoConfig.tableName,
     };
 
     const data = await dynamodb.scan(params).promise();

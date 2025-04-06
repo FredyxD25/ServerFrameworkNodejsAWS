@@ -1,12 +1,13 @@
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
+const DynamoConfig = require('./dynamoConfig');
 
 module.exports.deleteTask = async (event) => {
   try {
     const { id } = event.pathParameters;
 
     const params = {
-      TableName: 'TablaPrueba',
+      TableName: DynamoConfig.tableName,
       Key: { id },
     };
 

@@ -1,21 +1,24 @@
 const AWS = require('aws-sdk');
 const { v4 } = require('uuid');
+const DynamoConfig = require('./dynamoConfig');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.postTask = async (event) => {
   try {
-    // Parsear el body (que viene como string)
-    const { title, description } = JSON.parse(event.body);
+    
+    const { nombre, usuarioAsignado, texto} = JSON.parse(event.body);
     const createdAt = new Date().toISOString();
     const id = v4();
 
     const params = {
-      TableName: 'TablaPrueba',
+      TableName: DynamoConfig.tableName,
       Item: {
-        id,
-        title,
-        description,
+        id: `PROYECTO#1`,                   // Partition Key
+        sortKey: `TAREA#${id}`,             // Sort Key
+        nombre,
+        texto,
+        usuarioAsignado,
         createdAt,
       },
     };

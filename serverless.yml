@@ -14,14 +14,14 @@ provider:
         - dynamodb:GetItem
         - dynamodb:Scan
         - dynamodb:DeleteItem
-      Resource:
-        - arn:aws:dynamodb:us-east-1:158735973681:table/TablaPrueba
+      Resource: #Cambiar arn cada vez que se cree una nueva tabla
+        - arn:aws:dynamodb:us-east-1:158735973681:table/ProyectosTareas
 
 package:
   include:
     - node_modules/aws-sdk/**
 
-functions:
+functions: #Funciones de Lambda
   postTask:
     handler: src/postTask.postTask
     events:
@@ -47,16 +47,20 @@ functions:
           path: /task/{id}
           method: put
 
-resources: # Configuracion for dynamodb
+resources: # Configuracion para DynamoDB
   Resources:
     usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: TablaPrueba
+        TableName: ProyectosTareas
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: sortKey
+            AttributeType: S
         KeySchema:
           - AttributeName: id
-            KeyType: HASH
+            KeyType: HASH   # Partition Key
+          - AttributeName: sortKey
+            KeyType: RANGE  # Sort Key

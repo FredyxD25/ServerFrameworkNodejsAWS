@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
+const DynamoConfig = require('./dynamoConfig');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -19,7 +20,7 @@ module.exports.updateTask = async (event) => {
     const id = uuidv4();
 
     const params = {
-      TableName: 'TablaPrueba',
+      TableName: DynamoConfig.tableName,
       Item: {
         id,
         title,

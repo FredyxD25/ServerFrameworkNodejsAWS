@@ -75,7 +75,13 @@ serverless deploy --verbose
 
     En amazon entrar a cloud watch
 
+---Ejemplo PK y SK keys-----
 
-Pendiente
-    Enrutador
+{
+  "id": "PROYECTO#123",
+  "sortKey": "TAREA#001",
+  "nombre": "Armar backend",
+  "usuarioAsignado": "fredy"
+}
+
     

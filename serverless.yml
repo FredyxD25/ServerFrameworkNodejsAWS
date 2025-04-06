@@ -22,24 +22,30 @@ package:
     - node_modules/aws-sdk/**
 
 functions:
-  hello:
-    handler: src/handler.hello
+  postTask:
+    handler: src/postTask.postTask
     events:
       - httpApi:
-          path: /
-          method: get
-  createTask:
-    handler: src/crearTarea.crearTarea
-    events:
-      - httpApi:
-          path: /enviar
+          path: /task
           method: post
   getTask:
     handler: src/getTask.getTask
     events:
       - httpApi:
-          path: /visualizar
+          path: /task
           method: get
+  deleteTask:
+    handler: src/deleteTask.deleteTask
+    events:
+      - httpApi:
+          path: /task/{id}
+          method: delete
+  updateTask:
+    handler: src/updateTask.updateTask
+    events:
+      - httpApi:
+          path: /task/{id}
+          method: put
 
 resources: # Configuracion for dynamodb
   Resources:

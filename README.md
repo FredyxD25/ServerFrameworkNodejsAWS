@@ -2,6 +2,7 @@
 
 **Comando para ejecutar scritps en powershell**
 Set-ExecutionPolicy Unrestricted -Scope Process
+serverless deploy --verbose
 
 1. Crear un Grupo IAM y un usuario con credenciales
 
@@ -63,7 +64,7 @@ Set-ExecutionPolicy Unrestricted -Scope Process
 ------------**Logs en tiempo real**--------------
 -------------------------------------------------
     debugear :v
-        serverless logs -f createTask --tail
+        serverless logs -f updateTask --tail
     
     eliminar y crear lambda
         serverless remove

@@ -79,6 +79,22 @@ functions: #Funciones de Lambda
           path: /project
           method: post
   
+  #Actualizar un proyecto
+  putProject:
+    handler: src/logic/Projects/putProject.putProject
+    events:
+      - httpApi:
+          path: /project/{projectId}
+          method: put
+  
+  #Eliminar un proyecto
+  deleteProject:
+    handler: src/logic/Projects/deleteProject.deleteProject
+    events:
+      - httpApi:
+          path: /project/{projectId}
+          method: delete
+  
 #----------Funciones Tarea---------------------------------------------------
   #Asignar una proyecto a un usuario
   postGetTasksByProject:
@@ -135,6 +151,3 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 5
-              WriteCapacityUnits: 5

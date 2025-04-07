@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
 const DynamoConfig = require('../../../config/dynamoConfig');
-const logError = require('../../utils/buildTaskItem');
+const logError = require('../../utils/logError');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.postTasksByProject = async (event) => {

@@ -1,49 +1,31 @@
 const AWS = require('aws-sdk');
-const { v4 } = require('uuid');
 const DynamoConfig = require('../../../config/dynamoConfig');
-
+const ProjectItem = require('../../utils/ProjectItem');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.postProject = async (event) => {
   try {
     const { nombre, descripcion, creadorId } = JSON.parse(event.body);
 
-    if (!nombre || !creadorId) {
+    if (!nombre || !creadorId || !descripcion) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "Los campos 'nombre' y 'creadorId' son obligatorios." }),
+        body: JSON.stringify({ error: "Los campos 'nombre', 'creadorId' y descripcion son obligatorios." }),
       };
     }
 
-    const createdAt = new Date().toISOString();
-    const projectId = v4();
-
-    const proyecto = {
-      PK: `PROJECT#${projectId}`,
-      SK: `METADATA#${projectId}`,
-
-      
-      projectId,
-      nombre,
-      descripcion,
-      creadorId,
-      createdAt,
-
-      // Para consultas por usuario creador
-      GSI1PK: `USER#${creadorId}`,
-      GSI1SK: `PROYECTO#${projectId}`
-    };
-
+    const item = ProjectItem({ nombre, descripcion, creadorId });
+    
     const params = {
       TableName: DynamoConfig.tableName,
-      Item: proyecto
+      Item: item,
     };
 
     await dynamodb.put(params).promise();
 
     return {
       statusCode: 201,
-      body: JSON.stringify({ message: 'Proyecto creado exitosamente', projectId }),
+      body: JSON.stringify({ message: 'Proyecto creado exitosamente', projectId: item.projectId }),
     };
 
   } catch (error) {

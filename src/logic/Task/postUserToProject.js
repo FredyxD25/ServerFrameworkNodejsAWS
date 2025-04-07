@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const DynamoConfig = require('../../../config/dynamoConfig');
-
+const logError = require('../../utils/logError');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.postUserToProject = async (event) => {

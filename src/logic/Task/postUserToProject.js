@@ -3,7 +3,7 @@ const DynamoConfig = require('../../../config/dynamoConfig');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.asignarUsuarioAProyecto = async (event) => {
+module.exports.postUserToProject = async (event) => {
   try {
     const { userId, projectId, rol = 'colaborador' } = JSON.parse(event.body);
 

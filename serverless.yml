@@ -5,10 +5,6 @@ service: aws-lambda
 
 custom:
   tableName: ProyectosTareas
-  esbuild:
-    bundle: true
-    alias:
-      '@config': './config'
 
 provider:
   name: aws
@@ -84,54 +80,23 @@ functions: #Funciones de Lambda
           method: post
   
 #----------Funciones Tarea---------------------------------------------------
-  #Obtener todas las tareas
-
-  #Asignar una tarea a un usuario
-  postTask:
-    handler: src/logic/Task/asignarUsuarioProyecto.asignarUsuarioProyecto
+  #Asignar una proyecto a un usuario
+  postGetTasksByProject:
+    handler: src/logic/Task/postTasksByProject.postTasksByProject
+    events:
+      - httpApi:
+          path: /taskproject
+          method: post
+  #Asignar una proyecto a un usuario
+  postUserToProject:
+    handler: src/logic/Task/postUserToProject.postUserToProject
     events:
       - httpApi:
           path: /task
           method: post
 
-  postTask:
-    handler: src/postTask.postTask
-    events:
-      - httpApi:
-          path: /task
-          method: post
-  getTask:
-    handler: src/getTask.getTask
-    events:
-      - httpApi:
-          path: /task
-          method: get
-  getTasksProject:
-    handler: src/getTasksProject.getTasksProject
-    events:
-      - httpApi:
-          path: /task/{proyectoId}
-          method: get
-  getTasksUser:
-    handler: src/getTasksUser.getTasksUser
-    events:
-      - httpApi:
-          path: /task/user/{userId}/status/{status}
-          method: get
-  deleteTask:
-    handler: src/deleteTask.deleteTask
-    events:
-      - httpApi:
-          path: /task/{proyectoId}
-          method: delete
-  updateTask:
-    handler: src/updateTask.updateTask
-    events:
-      - httpApi:
-          path: /task/{proyectoId}
-          method: put
-
-resources: # Configuracion para DynamoDB
+#------------Configuracion para DynamoDB-----------------------------------
+resources: 
   Resources:
     ProjectSystemTable:
       Type: AWS::DynamoDB::Table

@@ -63,7 +63,7 @@ serverless deploy --verbose
 -------------------------------------------------
 ------------**Logs en tiempo real**--------------
 -------------------------------------------------
-    debugear :v
+    debugear
         serverless logs -f updateTask --tail
     
     eliminar y crear lambda
@@ -75,13 +75,7 @@ serverless deploy --verbose
 
     En amazon entrar a cloud watch
 
----Ejemplo PK y SK keys-----
+    serverless info
 
-{
-  "id": "PROYECTO#123",
-  "sortKey": "TAREA#001",
-  "nombre": "Armar backend",
-  "usuarioAsignado": "fredy"
-}
 
     

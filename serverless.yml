@@ -85,14 +85,23 @@ functions: #Funciones de Lambda
     handler: src/logic/Task/postTasksByProject.postTasksByProject
     events:
       - httpApi:
-          path: /taskproject
+          path: /taskbyproject
           method: post
+
   #Asignar una proyecto a un usuario
   postUserToProject:
     handler: src/logic/Task/postUserToProject.postUserToProject
     events:
       - httpApi:
-          path: /task
+          path: /usertoproject
+          method: post
+
+  #Asignar un usuario a una tarea
+  postUserToTask:
+    handler: src/logic/Task/postUserToTask.postUserToTask
+    events:
+      - httpApi:
+          path: /usertotask
           method: post
 
 #------------Configuracion para DynamoDB-----------------------------------
@@ -126,3 +135,6 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5

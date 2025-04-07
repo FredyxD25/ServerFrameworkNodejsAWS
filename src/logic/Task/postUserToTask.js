@@ -3,21 +3,23 @@ const DynamoConfig = require('../../../config/dynamoConfig');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.postUserToProject = async (event) => {
+module.exports.postUserToTask = async (event) => {
   try {
-    const { userId, projectId, rol } = JSON.parse(event.body);
+    const { userId, taskId, rol } = JSON.parse(event.body);
 
-    if (!userId || !projectId || !rol) {
+    if (!userId || !taskId || !rol) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "Se requieren 'userId', 'projectId' y 'rol'" }),
+        body: JSON.stringify({ error: "Se requieren 'userId', 'taskId' y 'rol'" }),
       };
     }
 
     const relacion = {
       PK: `USER#${userId}`,
-      SK: `PROJECT#${projectId}`,
-      entityType: 'USER_PROJECT_RELATION',
+      SK: `TASK#${taskId}`,
+      GSI1PK: `USER#${userId}`,
+      GSI1SK: estadoTarea,
+      entityType: 'USER_TASK_RELATION',
       rol,
       fechaAsignacion: new Date().toISOString()
     };
@@ -25,7 +27,7 @@ module.exports.postUserToProject = async (event) => {
     const params = {
       TableName: DynamoConfig.tableName,
       Item: relacion,
-      ConditionExpression: 'attribute_not_exists(PK) AND attribute_not_exists(SK)' // Evita duplicados
+      ConditionExpression: 'attribute_not_exists(PK) AND attribute_not_exists(SK)' // evita duplicados
     };
 
     await dynamodb.put(params).promise();
@@ -33,7 +35,7 @@ module.exports.postUserToProject = async (event) => {
     return {
       statusCode: 201,
       body: JSON.stringify({
-        message: ' Usuario asignado al proyecto correctamente',
+        message: 'Usuario asignado a la tarea correctamente',
         data: relacion
       }),
     };

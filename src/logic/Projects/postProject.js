@@ -21,6 +21,8 @@ module.exports.postProject = async (event) => {
     const proyecto = {
       PK: `PROJECT#${projectId}`,
       SK: `METADATA#${projectId}`,
+
+      
       projectId,
       nombre,
       descripcion,

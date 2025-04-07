@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
 const DynamoConfig = require('../../../config/dynamoConfig');
-
+const logError = require('../../utils/buildTaskItem');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.postTasksByProject = async (event) => {
@@ -26,6 +26,7 @@ module.exports.postTasksByProject = async (event) => {
         // Claves principales
         PK: `PROJECT#${projectId}`,
         SK: `TASK#${taskId}`,
+        entityType: 'TASK_PROJECT_RELATION',
 
         // Datos de la tarea
         taskId,
@@ -55,10 +56,6 @@ module.exports.postTasksByProject = async (event) => {
     };
 
   } catch (error) {
-    console.error('Error al crear tarea:', error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Error interno del servidor' }),
-    };
+    return logError(error);
   }
 };

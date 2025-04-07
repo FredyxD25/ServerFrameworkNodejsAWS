@@ -1,19 +1,19 @@
 const { v4: uuidv4 } = require('uuid');
 
 
-function ProjectItem({ nombre, descripcion, creadorId }) {
+function ProjectItem({ titulo, descripcion, creadorId ,fechalimite }) {
   const projectId = uuidv4();
   const createdAt = new Date().toISOString();
 
   return {
     PK: `PROJECT#${projectId}`,
     SK: `METADATA#${projectId}`,
-    projectId,
     createdAt,
 
-    nombre,
+    titulo,
     descripcion,
     creadorId,
+    fechalimite, 
 
     // Para consultas por usuario creador
     GSI1PK: `USER#${creadorId}`,

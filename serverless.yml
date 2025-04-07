@@ -33,7 +33,7 @@ functions: #Funciones de Lambda
 
   # Obtener todos los usuarios
   getAllUsers:
-    handler: src/logic/User/getAllUsers.getAllUsers
+    handler: src/handlers/User/getAllUsers.getAllUsers
     events:
       - httpApi:
           path: /user
@@ -41,7 +41,7 @@ functions: #Funciones de Lambda
 
   # Obtener un usuario por ID
   getUser:
-    handler: src/logic/User/getUser.getUser
+    handler: src/handlers/User/getUser.getUser
     events:
       - httpApi:
           path: /user/{userId}
@@ -49,7 +49,7 @@ functions: #Funciones de Lambda
 
   # Crear un usuario
   postUser:
-    handler: src/logic/User/postUser.postUser
+    handler: src/handlers/User/postUser.postUser
     events:
       - httpApi:
           path: /user
@@ -57,7 +57,7 @@ functions: #Funciones de Lambda
   
   #Actualizar un usuario
   putUser:
-    handler: src/logic/User/putUser.putUser
+    handler: src/handlers/User/putUser.putUser
     events:
       - httpApi:
           path: /user/{userId}
@@ -65,7 +65,7 @@ functions: #Funciones de Lambda
   
   #Eliminar un usuario
   deleteUser:
-    handler: src/logic/User/deleteUser.deleteUser
+    handler: src/handlers/User/deleteUser.deleteUser
     events:
       - httpApi:
           path: /user/{userId}
@@ -75,21 +75,21 @@ functions: #Funciones de Lambda
 
   #Obtener todos los proyectos
   getAllProjects:
-    handler: src/logic/Projects/getAllProjects.getAllProjects
+    handler: src/handlers/Projects/getAllProjects.getAllProjects
     events:
       - httpApi:
           path: /project
           method: get
   #Obtener un proyecto por ID
   getProject:
-    handler: src/logic/Projects/getProject.getProject
+    handler: src/handlers/Projects/getProject.getProject
     events:
       - httpApi:
           path: /project/{projectId}
           method: get
   #Crear un proyecto
   postProject:
-    handler: src/logic/Projects/postProject.postProject
+    handler: src/handlers/Projects/postProject.postProject
     events:
       - httpApi:
           path: /project
@@ -97,7 +97,7 @@ functions: #Funciones de Lambda
   
   #Actualizar un proyecto
   putProject:
-    handler: src/logic/Projects/putProject.putProject
+    handler: src/handlers/Projects/putProject.putProject
     events:
       - httpApi:
           path: /project/{projectId}
@@ -105,32 +105,55 @@ functions: #Funciones de Lambda
   
   #Eliminar un proyecto
   deleteProject:
-    handler: src/logic/Projects/deleteProject.deleteProject
+    handler: src/handlers/Projects/deleteProject.deleteProject
     events:
       - httpApi:
           path: /project/{projectId}
           method: delete
   
-#----------Funciones Tarea---------------------------------------------------
-  #Asignar una proyecto a un usuario
-  postGetTasksByProject:
-    handler: src/logic/Task/postTasksByProject.postTasksByProject
+#----------Funciones Servicios---------------------------------------------------
+
+  #---------Tareas ---------------------------------------------------
+  #Asignar una tarea a un proyecto
+  postTasksByProject:
+    handler: src/services/tasks/postTasksByProject.postTasksByProject
     events:
       - httpApi:
           path: /taskbyproject
           method: post
+  
+  #Actualizar una tarea de un proyecto
+  putTasksByProject:
+    handler: src/services/tasks/putTasksByProject.putTasksByProject
+    events:
+      - httpApi:
+          path: /taskbyproject/{projectId}/{taskId}
+          method: put
+  
+  #Eliminar una tarea de un proyecto
+  deleteTasksByProject:
+    handler: src/services/tasks/deleteTasksByProject.deleteTasksByProject
+    events:
+      - httpApi:
+          path: /taskbyproject/{projectId}/{taskId}
+          method: delete
 
-  #Asignar una proyecto a un usuario
+
+
+
+
+  #Actualizar una tarea de un proyecto
   postUserToProject:
-    handler: src/logic/Task/postUserToProject.postUserToProject
+    handler: src/services/postUserToProject.postUserToProject
     events:
       - httpApi:
           path: /usertoproject
           method: post
 
+
   #Asignar un usuario a una tarea
   postUserToTask:
-    handler: src/logic/Task/postUserToTask.postUserToTask
+    handler: src/services/postUserToTask.postUserToTask
     events:
       - httpApi:
           path: /usertotask

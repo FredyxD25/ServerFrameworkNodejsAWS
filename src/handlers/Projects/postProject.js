@@ -1,20 +1,20 @@
 const AWS = require('aws-sdk');
-const DynamoConfig = require('../../../config/dynamoConfig');
+const DynamoConfig = require('../../config/dynamoConfig');
 const ProjectItem = require('../../utils/ProjectItem');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.postProject = async (event) => {
   try {
-    const { nombre, descripcion, creadorId } = JSON.parse(event.body);
+    const { titulo, descripcion, creadorId , fechalimite } = JSON.parse(event.body);
 
-    if (!nombre || !creadorId || !descripcion) {
+    const item = ProjectItem({ titulo, descripcion, creadorId , fechalimite});
+
+    if (!titulo || !creadorId || !descripcion || !fechalimite) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "Los campos 'nombre', 'creadorId' y descripcion son obligatorios." }),
+        body: JSON.stringify({ error: "Los campos 'titulo', 'creadorId' , fechalimite y descripcion son obligatorios." }),
       };
     }
-
-    const item = ProjectItem({ nombre, descripcion, creadorId });
     
     const params = {
       TableName: DynamoConfig.tableName,

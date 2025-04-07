@@ -1,33 +1,26 @@
 const AWS = require("aws-sdk");
-const { v4: uuidv4 } = require("uuid");
 const DynamoConfig = require('../../../config/dynamoConfig');
-
+const ProjectItem = require('../../utils/ProjectItem');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.putProject = async (event) => {
   try {
-    const body = JSON.parse(event.body);
+    const {titulo, descripcion, creadorId , fechalimite} = JSON.parse(event.body);
 
     const { projectId } = event.pathParameters; // projectId desde la URL
-    const createdAt = new Date().toISOString();
+  
+    const item = ProjectItem({ titulo, descripcion, creadorId , fechalimite});
 
-    const {nombre,descripcion,creadorId} = body;
+    if (!titulo || !creadorId || !descripcion || !fechalimite) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Los campos 'titulo', 'creadorId' , fechalimite y descripcion son obligatorios." }),
+      };
+    }
 
     const params = {
       TableName: DynamoConfig.tableName,
-      Item: {
-        PK: `PROJECT#${projectId}`,
-        SK: `METADATA#${projectId}`,
-        projectId,
-        createdAt,
-        nombre,
-        descripcion,
-        creadorId,
-
-        // GSI para consultas por usuario
-        GSI1PK: `USER#${creadorId}`,
-        GSI1SK: `PROYECTO#${projectId}`
-      }
+      Item: item,
     };
 
     await dynamodb.put(params).promise();

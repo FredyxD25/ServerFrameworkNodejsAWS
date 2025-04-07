@@ -8,7 +8,6 @@ function UserItem({ nombre, correo }) {
   return {
     PK: `USER#${userId}`,
     SK: `METADATA#${userId}`,
-    userId,
     createdAt,
 
     nombre,

@@ -11,11 +11,7 @@ module.exports.putProject = async (event) => {
     const { projectId } = event.pathParameters; // projectId desde la URL
     const createdAt = new Date().toISOString();
 
-    const {
-      nombre,
-      descripcion,
-      creadorId
-    } = body;
+    const {nombre,descripcion,creadorId} = body;
 
     const params = {
       TableName: DynamoConfig.tableName,

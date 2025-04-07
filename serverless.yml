@@ -55,6 +55,22 @@ functions: #Funciones de Lambda
           path: /user
           method: post
   
+  #Actualizar un usuario
+  putUser:
+    handler: src/logic/User/putUser.putUser
+    events:
+      - httpApi:
+          path: /user/{userId}
+          method: put
+  
+  #Eliminar un usuario
+  deleteUser:
+    handler: src/logic/User/deleteUser.deleteUser
+    events:
+      - httpApi:
+          path: /user/{userId}
+          method: delete
+
 #----------Funciones Proyecto---------------------------------------------------
 
   #Obtener todos los proyectos

@@ -17,7 +17,7 @@ function ProjectItem({ titulo, descripcion, creadorId ,fechalimite }) {
 
     // Para consultas por usuario creador
     GSI1PK: `USER#${creadorId}`,
-    GSI1SK: `PROYECTO#${projectId}`
+    GSI1SK: `PROJECT#${projectId}`
   };
 }
 

@@ -5,6 +5,10 @@ service: aws-lambda
 
 custom:
   tableName: ProyectosTareas
+  esbuild:
+    bundle: true
+    alias:
+      '@config': './config'
 
 provider:
   name: aws
@@ -28,6 +32,68 @@ package:
     - node_modules/aws-sdk/**
 
 functions: #Funciones de Lambda
+
+#-------Funciones Usuario-----------------------------------------------------------
+
+  # Obtener todos los usuarios
+  getAllUsers:
+    handler: src/logic/User/getAllUsers.getAllUsers
+    events:
+      - httpApi:
+          path: /user
+          method: get
+
+  # Obtener un usuario por ID
+  getUser:
+    handler: src/logic/User/getUser.getUser
+    events:
+      - httpApi:
+          path: /user/{userId}
+          method: get
+
+  # Crear un usuario
+  postUser:
+    handler: src/logic/User/postUser.postUser
+    events:
+      - httpApi:
+          path: /user
+          method: post
+  
+#----------Funciones Proyecto---------------------------------------------------
+
+  #Obtener todos los proyectos
+  getAllProjects:
+    handler: src/logic/Projects/getAllProjects.getAllProjects
+    events:
+      - httpApi:
+          path: /project
+          method: get
+  #Obtener un proyecto por ID
+  getProject:
+    handler: src/logic/Projects/getProject.getProject
+    events:
+      - httpApi:
+          path: /project/{projectId}
+          method: get
+  #Crear un proyecto
+  postProject:
+    handler: src/logic/Projects/postProject.postProject
+    events:
+      - httpApi:
+          path: /project
+          method: post
+  
+#----------Funciones Tarea---------------------------------------------------
+  #Obtener todas las tareas
+
+  #Asignar una tarea a un usuario
+  postTask:
+    handler: src/logic/Task/asignarUsuarioProyecto.asignarUsuarioProyecto
+    events:
+      - httpApi:
+          path: /task
+          method: post
+
   postTask:
     handler: src/postTask.postTask
     events:

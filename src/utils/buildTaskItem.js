@@ -1,7 +1,8 @@
-const { v4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
+
 
 function buildTaskItem({ title, description, usuarioAsignado, proyectoId, status = 'PENDING', dueDate }) {
-  const taskId = v4();
+  const taskId = uuidv4();
   const createdAt = new Date().toISOString();
 
   return {

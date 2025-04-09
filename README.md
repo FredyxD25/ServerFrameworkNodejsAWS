@@ -10,9 +10,9 @@ serverless deploy --verbose
     serverless-prueba,N3bL5X5(,https://fredymain.signin.aws.amazon.com/console
 
     Access key
-        AKIASJ5LGXUYU3763DKE
+        *****************************
     Secret access key
-        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
+        *********************************
 
 2. Descargar: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
